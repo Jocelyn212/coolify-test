@@ -1,0 +1,149 @@
+---
+---
+<div class="flex flex-col gap-6">
+  
+  <!-- Header -->
+  <div class="mb-6">
+    <h2 class="text-3xl font-extrabold tracking-tight mb-2" style="background: linear-gradient(135deg, #E6EDF3 0%, #8ddad2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Asistente de texto</h2>
+    <p class="mono text-sm" style="color: #b0b8c4;">Corrige, mejora o resume cualquier texto en segundos.</p>
+  </div>
+
+  <!-- Grid -->
+  <div class="grid md:grid-cols-2 gap-6">
+    
+    <!-- Input -->
+    <div class="flex flex-col gap-4">
+      <label class="mono text-xs tracking-widest uppercase font-semibold" style="color: #8ddad2;">Tu texto</label>
+      <textarea
+        id="asistente-input"
+        placeholder="Escribe o pega tu texto aquí..."
+        class="min-h-60 border-2 rounded-xl p-4 text-base placeholder-opacity-60 resize-none focus:outline-none transition-all"
+        style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94; color: #E6EDF3;"
+        onfocus="this.style.borderColor='#8ddad2'; this.style.boxShadow='0 0 20px rgba(141, 218, 210, 0.2)'"
+        onblur="this.style.borderColor='#2a5d94'; this.style.boxShadow='none'"
+      ></textarea>
+
+      <!-- Botones -->
+      <div class="grid grid-cols-3 gap-2">
+        {[
+          { accion: 'corregir', label: '✓ Corregir' },
+          { accion: 'mejorar', label: '↑ Mejorar' },
+          { accion: 'resumir', label: '◎ Resumir' },
+        ].map(({ accion, label }) => (
+          <button
+            data-accion={accion}
+            class="asistente-btn mono text-sm py-3 px-2 border-2 rounded-lg transition-all font-medium"
+            style="background: linear-gradient(135deg, rgba(42, 93, 148, 0.3) 0%, rgba(88, 159, 184, 0.2) 100%); border-color: #2a5d94; color: #589fb8;"
+            onmouseover="this.style.borderColor='#8ddad2'; this.style.color='#8ddad2'; this.style.background='linear-gradient(135deg, rgba(42, 93, 148, 0.5) 0%, rgba(88, 159, 184, 0.4) 100%)'"
+            onmouseout="this.style.borderColor='#2a5d94'; this.style.color='#589fb8'; this.style.background='linear-gradient(135deg, rgba(42, 93, 148, 0.3) 0%, rgba(88, 159, 184, 0.2) 100%)'"
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Output -->
+    <div class="flex flex-col gap-4">
+      <div class="flex justify-between items-center">
+        <label class="mono text-xs tracking-widest uppercase font-semibold" style="color: #8ddad2;">Resultado</label>
+        <button id="asistente-copiar" class="mono text-sm transition-all font-medium hidden px-3 py-1 rounded" style="color: #E6EDF3; background: rgba(141, 218, 210, 0.15);" onmouseover="this.style.background='rgba(141, 218, 210, 0.25)'; this.style.color='#8ddad2'" onmouseout="this.style.background='rgba(141, 218, 210, 0.15)'; this.style.color='#E6EDF3'">
+          copiar →
+        </button>
+      </div>
+
+      <div id="asistente-output" class="relative min-h-60 border-2 rounded-xl p-4 text-base leading-relaxed transition-all" style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94; color: #E6EDF3;">
+        <span id="asistente-placeholder" style="color: #b0b8c4;">El resultado aparecerá aquí...</span>
+        <div id="asistente-loading" class="absolute inset-0 items-center justify-center" style="display: none;">
+          <div class="flex gap-1">
+            <span class="w-3 h-3 rounded-full animate-bounce" style="animation-delay:0s; background: linear-gradient(135deg, #2a5d94, #8ddad2);"></span>
+            <span class="w-3 h-3 rounded-full animate-bounce" style="animation-delay:0.15s; background: linear-gradient(135deg, #589fb8, #8ddad2);"></span>
+            <span class="w-3 h-3 rounded-full animate-bounce" style="animation-delay:0.3s; background: linear-gradient(135deg, #8ddad2, #589fb8);"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div id="asistente-stats" class="grid grid-cols-2 gap-2" style="display: none;">
+        <div class="border-2 rounded-lg p-4 transition-all" style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94;">
+          <div id="asistente-tiempo" class="text-lg font-bold" style="color: #8ddad2;">—</div>
+          <div class="mono text-xs uppercase tracking-widest mt-2" style="color: #b0b8c4;">segundos</div>
+        </div>
+        <div class="border-2 rounded-lg p-4 transition-all" style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94;">
+          <div id="asistente-palabras" class="text-lg font-bold" style="color: #589fb8;">—</div>
+          <div class="mono text-xs uppercase tracking-widest mt-2" style="color: #b0b8c4;">palabras</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const btns = document.querySelectorAll('.asistente-btn');
+  const input = document.getElementById('asistente-input') as HTMLTextAreaElement;
+  const output = document.getElementById('asistente-output')!;
+  const loading = document.getElementById('asistente-loading')!;
+  const placeholder = document.getElementById('asistente-placeholder')!;
+  const copiarBtn = document.getElementById('asistente-copiar')!;
+  const stats = document.getElementById('asistente-stats')!;
+  const statTiempo = document.getElementById('asistente-tiempo')!;
+  const statPalabras = document.getElementById('asistente-palabras')!;
+
+  let resultadoTexto = '';
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const texto = input.value.trim();
+      if (!texto) return;
+
+      const accion = btn.getAttribute('data-accion')!;
+
+      placeholder.classList.add('hidden');
+      loading.style.display = 'flex';
+      copiarBtn.classList.add('hidden');
+      stats.style.display = 'none';
+
+      const inicio = Date.now();
+
+      try {
+        const res = await fetch('/api/ai', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ texto, accion }),
+        });
+
+        const data = await res.json();
+        const tiempo = ((Date.now() - inicio) / 1000).toFixed(1);
+        const palabras = data.resultado.split(' ').length;
+
+        resultadoTexto = data.resultado;
+        loading.style.display = 'none';
+
+        output.innerHTML = '';
+        output.style.whiteSpace = 'pre-wrap';
+        output.classList.add('text-zinc-100');
+        output.appendChild(document.createTextNode(resultadoTexto));
+        output.appendChild(loading);
+
+        copiarBtn.classList.remove('hidden');
+        stats.style.display = 'grid';
+        statTiempo.textContent = tiempo + 's';
+        statPalabras.textContent = palabras.toString();
+
+      } catch (e) {
+        loading.classList.add('hidden');
+        output.innerHTML = '<span class="text-red-400 mono text-xs">Error al conectar. Inténtalo de nuevo.</span>';
+      }
+    });
+  });
+
+  copiarBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(resultadoTexto);
+    copiarBtn.textContent = '✓ copiado';
+    setTimeout(() => copiarBtn.textContent = 'copiar →', 2000);
+  });
+</script>
+
+<style>
+  .mono { font-family: 'DM Mono', monospace; }
+</style>

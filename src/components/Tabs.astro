@@ -1,0 +1,87 @@
+---
+import TabAsistente from './TabAsistente.astro';
+import TabEmail from './TabEmail.astro';
+import TabRedes from './TabRedes.astro';
+import TabTraductor from './TabTraductor.astro';
+---
+
+<main class="pt-32 min-h-screen" style="background: #030612;">
+  
+  <!-- Tab buttons -->
+  <div class="sticky top-0 z-40 backdrop-blur-md border-b border-zinc-800" style="background: rgba(3, 6, 18, 0.9);">
+    <div class="max-w-5xl mx-auto px-4">
+      <div class="flex overflow-x-auto scrollbar-none gap-1 py-2">
+        {[
+          { id: 'asistente', label: '✓ Texto' },
+          { id: 'email', label: '✉ Email' },
+          { id: 'redes', label: '◎ Redes' },
+          { id: 'traductor', label: '⇄ Traducir' },
+        ].map(tab => (
+          <button
+            data-tab={tab.id}
+            class="tab-btn shrink-0 mono text-xs px-4 py-2 rounded-lg border transition-all whitespace-nowrap"
+            style="border-color: #2a5d94; color: #E6EDF3; background: transparent; cursor: pointer;"
+          >
+            {tab.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab content -->
+  <div class="max-w-5xl mx-auto px-4 py-8">
+    <div id="tab-asistente" class="tab-content">
+      <TabAsistente />
+    </div>
+    <div id="tab-email" class="tab-content hidden">
+      <TabEmail />
+    </div>
+    <div id="tab-redes" class="tab-content hidden">
+      <TabRedes />
+    </div>
+    <div id="tab-traductor" class="tab-content hidden">
+      <TabTraductor />
+    </div>
+  </div>
+
+</main>
+
+<script>
+  const btns = document.querySelectorAll('.tab-btn');
+  const contents = document.querySelectorAll('.tab-content');
+
+  function activateTab(id: string) {
+    btns.forEach(btn => {
+      const htmlBtn = btn as HTMLElement;
+      const isActive = btn.getAttribute('data-tab') === id;
+      if (isActive) {
+        htmlBtn.style.borderColor = '#8ddad2';
+        htmlBtn.style.color = '#8ddad2';
+        htmlBtn.style.backgroundColor = 'rgba(141, 218, 210, 0.05)';
+      } else {
+        htmlBtn.style.borderColor = '#2a5d94';
+        htmlBtn.style.color = '#E6EDF3';
+        htmlBtn.style.backgroundColor = 'transparent';
+      }
+    });
+    contents.forEach(content => {
+      content.classList.toggle('hidden', content.id !== `tab-${id}`);
+    });
+  }
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      activateTab(btn.getAttribute('data-tab')!);
+    });
+  });
+
+  // Activar primera pestaña por defecto
+  activateTab('asistente');
+</script>
+
+<style>
+  .mono { font-family: 'DM Mono', monospace; }
+  .scrollbar-none::-webkit-scrollbar { display: none; }
+  .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+</style>

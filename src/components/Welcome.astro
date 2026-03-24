@@ -27,13 +27,13 @@
   <body class="bg-zinc-950 text-zinc-100 min-h-screen overflow-x-hidden">
 
     <!-- Glow decoration -->
-    <div class="fixed top-0 right-0 w-[600px] h-[600px] rounded-full bg-lime-400/5 blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
+    <div class="fixed top-0 right-0 w-150 h-150 rounded-full blur-3xl pointer-events-none -translate-y-1/2 translate-x-1/2" style="background: rgba(167, 120, 190, 0.05);"></div>
 
     <!-- Nav -->
     <nav class="fixed top-0 left-0 right-0 z-10 flex justify-between items-center px-8 py-5 border-b border-white/5 backdrop-blur-md">
       <span class="mono text-xs tracking-widest uppercase text-zinc-100 font-bold">JC Tech Studio</span>
-      <div class="mono flex items-center gap-2 text-lime-400 text-xs border border-lime-400/20 bg-lime-400/5 px-4 py-2 rounded-full">
-        <span class="w-1.5 h-1.5 rounded-full bg-lime-400 animate-blink"></span>
+      <div class="mono flex items-center gap-2 text-xs border px-4 py-2 rounded-full" style="border-color: #a778be; background: rgba(167, 120, 190, 0.05); color: #a778be;">
+        <span class="w-1.5 h-1.5 rounded-full animate-blink" style="background-color: #a778be;"></span>
         online · coolify
       </div>
     </nav>
@@ -45,13 +45,13 @@
         <!-- Eyebrow -->
         <div class="fade-1 mono flex items-center gap-4 text-xs tracking-widest uppercase text-zinc-500">
           Infraestructura propia
-          <span class="h-px w-14 bg-zinc-700"></span>
+          <span class="h-px w-14" style="background-color: #a778be;"></span>
         </div>
 
         <!-- Heading -->
         <h1 class="fade-2 text-[clamp(3.5rem,10vw,8rem)] font-extrabold leading-[0.95] tracking-tight">
           Código.<br/>
-          <span class="text-lime-400">Sin límites.</span>
+          <span style="color: #a778be;">Sin límites.</span>
         </h1>
 
         <!-- Description -->
@@ -63,7 +63,7 @@
         <!-- Tags -->
         <div class="fade-4 flex flex-wrap gap-2">
           {["Astro SSR", "React", "Node.js", "Docker", "MongoDB", "Coolify"].map(tag => (
-            <span class="mono text-xs px-3 py-1.5 border border-zinc-800 rounded text-zinc-500 hover:border-lime-400 hover:text-lime-400 transition-colors cursor-default">
+            <span class="mono text-xs px-3 py-1.5 border border-zinc-800 rounded text-zinc-500 hover:border-[#a778be] hover:text-[#a778be] transition-colors cursor-default">
               {tag}
             </span>
           ))}
@@ -79,7 +79,7 @@
         ].map(({ value, label }) => (
           <div class="px-6 py-5 hover:bg-zinc-900 transition-colors">
             <div class="text-3xl font-extrabold text-zinc-100">
-              {value.replace(/[×GBx]/g, '')}<span class="text-lime-400">{value.match(/[×GB]+/)?.[0]}</span>
+              {value.replace(/[×GBx]/g, '')}<span style="color: #a778be;">{value.match(/[×GB]+/)?.[0]}</span>
             </div>
             <div class="mono text-xs text-zinc-500 tracking-widest uppercase mt-1">{label}</div>
           </div>

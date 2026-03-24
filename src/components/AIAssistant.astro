@@ -1,0 +1,168 @@
+---
+---
+<!-- Este componente está deprecado. Usar TabAsistente.astro en su lugar -->
+<section class="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col">
+  
+  <!-- Hero -->
+  <div class="max-w-5xl mx-auto px-8 pt-32 pb-16 w-full">
+    <div class="fade-1 flex items-center gap-4 text-xs tracking-widest uppercase text-zinc-500 mono mb-8">
+      Asistente IA · Groq
+      <span class="h-px w-14 bg-zinc-700"></span>
+    </div>
+    <h1 class="fade-2 text-[clamp(2.5rem,7vw,5rem)] font-extrabold leading-tight tracking-tight mb-4">
+      Tu asistente de<br/>
+      <span class="text-lime-400">redacción.</span>
+    </h1>
+    <p class="fade-3 mono text-sm text-zinc-500 max-w-md leading-relaxed">
+      Corrige, mejora o resume cualquier texto en segundos. Sin salir de la app.
+    </p>
+  </div>
+
+  <!-- Tool -->
+  <div class="max-w-5xl mx-auto px-8 pb-16 w-full flex-1">
+    <div class="grid md:grid-cols-2 gap-4 h-full">
+      
+      <!-- Input -->
+      <div class="flex flex-col gap-3">
+        <label class="mono text-xs text-zinc-500 tracking-widest uppercase">Tu texto</label>
+        <textarea
+          id="input-texto"
+          placeholder="Escribe o pega tu texto aquí..."
+          class="flex-1 min-h-[280px] bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-sm text-zinc-100 placeholder-zinc-600 resize-none focus:outline-none focus:border-lime-400/50 transition-colors"
+        ></textarea>
+
+        <!-- Actions -->
+        <div class="grid grid-cols-3 gap-2">
+          <button data-accion="corregir" class="accion-btn mono text-xs py-3 px-4 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-400 hover:border-lime-400 hover:text-lime-400 transition-all">
+            ✓ Corregir
+          </button>
+          <button data-accion="mejorar" class="accion-btn mono text-xs py-3 px-4 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-400 hover:border-lime-400 hover:text-lime-400 transition-all">
+            ↑ Mejorar
+          </button>
+          <button data-accion="resumir" class="accion-btn mono text-xs py-3 px-4 bg-zinc-900 border border-zinc-800 rounded-lg text-zinc-400 hover:border-lime-400 hover:text-lime-400 transition-all">
+            ◎ Resumir
+          </button>
+        </div>
+      </div>
+
+      <!-- Output -->
+      <div class="flex flex-col gap-3">
+        <div class="flex justify-between items-center">
+          <label class="mono text-xs text-zinc-500 tracking-widest uppercase">Resultado</label>
+          <button id="copiar-btn" class="mono text-xs text-zinc-600 hover:text-lime-400 transition-colors hidden">
+            copiar →
+          </button>
+        </div>
+        <div
+          id="output-resultado"
+          class="flex-1 min-h-[280px] bg-zinc-900 border border-zinc-800 rounded-xl p-4 text-sm text-zinc-400 leading-relaxed relative"
+        >
+          <span id="placeholder-output" class="text-zinc-600">El resultado aparecerá aquí...</span>
+          
+          <!-- Loading -->
+          <div id="loading" class="hidden absolute inset-0 flex items-center justify-center">
+            <div class="flex gap-1">
+              <span class="w-2 h-2 bg-lime-400 rounded-full animate-bounce" style="animation-delay:0s"></span>
+              <span class="w-2 h-2 bg-lime-400 rounded-full animate-bounce" style="animation-delay:0.15s"></span>
+              <span class="w-2 h-2 bg-lime-400 rounded-full animate-bounce" style="animation-delay:0.3s"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div id="stats" class="hidden grid grid-cols-2 gap-2">
+          <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-3">
+            <div id="stat-tiempo" class="text-lg font-bold text-lime-400">—</div>
+            <div class="mono text-xs text-zinc-600 uppercase tracking-widest">segundos</div>
+          </div>
+          <div class="bg-zinc-900 border border-zinc-800 rounded-lg p-3">
+            <div id="stat-palabras" class="text-lg font-bold text-zinc-100">—</div>
+            <div class="mono text-xs text-zinc-600 uppercase tracking-widest">palabras</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const btns = document.querySelectorAll('.accion-btn');
+  const input = document.getElementById('input-texto') as HTMLTextAreaElement;
+  const output = document.getElementById('output-resultado')!;
+  const loading = document.getElementById('loading')!;
+  const placeholder = document.getElementById('placeholder-output')!;
+  const copiarBtn = document.getElementById('copiar-btn')!;
+  const stats = document.getElementById('stats')!;
+  const statTiempo = document.getElementById('stat-tiempo')!;
+  const statPalabras = document.getElementById('stat-palabras')!;
+
+  let resultadoTexto = '';
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const texto = input.value.trim();
+      if (!texto) return;
+
+      const accion = btn.getAttribute('data-accion')!;
+
+      // UI loading
+      placeholder.classList.add('hidden');
+      loading.classList.remove('hidden');
+      copiarBtn.classList.add('hidden');
+      stats.classList.add('hidden');
+      output.classList.remove('text-zinc-100');
+      output.classList.add('text-zinc-400');
+
+      const inicio = Date.now();
+
+      try {
+        const res = await fetch('/api/ai', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ texto, accion }),
+        });
+
+        const data = await res.json();
+        const tiempo = ((Date.now() - inicio) / 1000).toFixed(1);
+        const palabras = data.resultado.split(' ').length;
+
+        resultadoTexto = data.resultado;
+        loading.classList.add('hidden');
+        output.classList.remove('text-zinc-400');
+        output.classList.add('text-zinc-100');
+        
+        // Mostrar texto sin el placeholder
+        const textoNode = document.createTextNode(resultadoTexto);
+        output.innerHTML = '';
+        output.appendChild(textoNode);
+        output.appendChild(loading);
+
+        copiarBtn.classList.remove('hidden');
+        stats.classList.remove('hidden');
+        statTiempo.textContent = tiempo + 's';
+        statPalabras.textContent = palabras.toString();
+
+      } catch (e) {
+        loading.classList.add('hidden');
+        output.innerHTML = '<span class="text-red-400 mono text-xs">Error al conectar con la IA. Inténtalo de nuevo.</span>';
+      }
+    });
+  });
+
+  copiarBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(resultadoTexto);
+    copiarBtn.textContent = '✓ copiado';
+    setTimeout(() => copiarBtn.textContent = 'copiar →', 2000);
+  });
+</script>
+
+<style>
+  .mono { font-family: 'DM Mono', monospace; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-1 { animation: fadeUp 0.5s ease forwards; animation-delay: 0.1s; opacity: 0; }
+  .fade-2 { animation: fadeUp 0.5s ease forwards; animation-delay: 0.2s; opacity: 0; }
+  .fade-3 { animation: fadeUp 0.5s ease forwards; animation-delay: 0.3s; opacity: 0; }
+</style>

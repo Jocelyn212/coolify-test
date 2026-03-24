@@ -1,0 +1,172 @@
+---
+---
+
+<div class="flex flex-col gap-6">
+  
+  <!-- Header -->
+  <div class="mb-6">
+    <h2 class="text-3xl font-extrabold tracking-tight mb-2" style="background: linear-gradient(135deg, #E6EDF3 0%, #8ddad2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Traductor de Textos</h2>
+    <p class="mono text-sm" style="color: #b0b8c4;">Traduce tu texto a diferentes idiomas.</p>
+  </div>
+
+  <!-- Grid -->
+  <div class="grid md:grid-cols-2 gap-6">
+    
+    <!-- Input -->
+    <div class="flex flex-col gap-4">
+      <div>
+        <label class="mono text-xs tracking-widest uppercase font-semibold" style="color: #8ddad2;">Idioma destino</label>
+        <select
+          id="traductor-idioma"
+          class="w-full mt-2 border-2 rounded-lg p-3 text-base focus:outline-none transition-all"
+          style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94; color: #E6EDF3;"
+          onfocus="this.style.borderColor='#8ddad2'; this.style.boxShadow='0 0 20px rgba(141, 218, 210, 0.2)'"
+          onblur="this.style.borderColor='#2a5d94'; this.style.boxShadow='none'"
+        >
+          <option value="español">🇪🇸 Español</option>
+          <option value="catalán">⭐ Catalán</option>
+          <option value="inglés">🇬🇧 Inglés</option>
+          <option value="francés">🇫🇷 Francés</option>
+          <option value="alemán">🇩🇪 Alemán</option>
+          <option value="italiano">🇮🇹 Italiano</option>
+          <option value="portugués">🇵🇹 Portugués</option>
+          <option value="holandés">🇳🇱 Holandés</option>
+          <option value="ruso">🇷🇺 Ruso</option>
+          <option value="japonés">🇯🇵 Japonés</option>
+          <option value="chino mandarin">🇨🇳 Chino Mandarín</option>
+          <option value="árabe">🇸🇦 Árabe</option>
+          <option value="coreano">🇰🇷 Coreano</option>
+          <option value="vietnamita">🇻🇳 Vietnamita</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="mono text-xs tracking-widest uppercase font-semibold" style="color: #8ddad2;">Texto a traducir</label>
+        <textarea
+          id="traductor-input"
+          placeholder="Escribe o pega el texto que deseas traducir..."
+          class="w-full mt-2 min-h-60 border-2 rounded-lg p-4 text-base resize-none focus:outline-none transition-all"
+          style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94; color: #E6EDF3;"
+          onfocus="this.style.borderColor='#8ddad2'; this.style.boxShadow='0 0 20px rgba(141, 218, 210, 0.2)'"
+          onblur="this.style.borderColor='#2a5d94'; this.style.boxShadow='none'"
+        ></textarea>
+      </div>
+
+      <button
+        id="traductor-btn"
+        class="mono text-sm py-3 px-4 rounded-lg transition-all font-semibold"
+        style="background-color: #8ddad2; color: #0B1120; border: none;"
+        onmouseover="this.style.backgroundColor='#7dd0ca'; this.style.boxShadow='0 10px 30px rgba(141, 218, 210, 0.3)'"
+        onmouseout="this.style.backgroundColor='#8ddad2'; this.style.boxShadow='none'"
+      >
+        ⇄ Traducir
+      </button>
+    </div>
+
+    <!-- Output -->
+    <div class="flex flex-col gap-4">
+      <div class="flex justify-between items-center">
+        <label class="mono text-xs tracking-widest uppercase font-semibold" style="color: #8ddad2;">Traducción</label>
+        <button id="traductor-copiar" class="mono text-xs transition-colors hidden" style="color: #8ddad2;" onmouseover="this.style.color='#a3e635'" onmouseout="this.style.color='#8ddad2'">
+          copiar →
+        </button>
+      </div>
+
+      <div id="traductor-output" class="relative min-h-60 border-2 rounded-lg p-4 text-base leading-relaxed" style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.2) 0%, rgba(11, 17, 32, 0.9) 100%); border-color: #589fb8; color: #E6EDF3;">
+        <span id="traductor-placeholder" style="color: #b0b8c4;">La traducción aparecerá aquí...</span>
+        <div id="traductor-loading" class="absolute inset-0 items-center justify-center" style="display: none;">
+          <div class="flex gap-1">
+            <span class="w-2 h-2 rounded-full animate-bounce" style="animation-delay:0s; background: linear-gradient(135deg, #8ddad2 0%, #589fb8 100%);"></span>
+            <span class="w-2 h-2 rounded-full animate-bounce" style="animation-delay:0.15s; background: linear-gradient(135deg, #589fb8 0%, #8ddad2 100%);"></span>
+            <span class="w-2 h-2 rounded-full animate-bounce" style="animation-delay:0.3s; background: linear-gradient(135deg, #8ddad2 0%, #589fb8 100%);"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div id="traductor-stats" class="grid grid-cols-2 gap-3" style="display: none;">
+        <div class="border-2 rounded-lg p-3" style="border-color: #2a5d94; background: linear-gradient(135deg, rgba(141, 218, 210, 0.1) 0%, rgba(88, 159, 184, 0.1) 100%);">
+          <div id="traductor-tiempo" class="text-lg font-bold" style="color: #8ddad2;">—</div>
+          <div class="mono text-xs uppercase tracking-widest" style="color: #b0b8c4;">segundos</div>
+        </div>
+        <div class="border-2 rounded-lg p-3" style="border-color: #2a5d94; background: linear-gradient(135deg, rgba(141, 218, 210, 0.1) 0%, rgba(88, 159, 184, 0.1) 100%);">
+          <div id="traductor-caracteres" class="text-lg font-bold" style="color: #E6EDF3;">—</div>
+          <div class="mono text-xs uppercase tracking-widest" style="color: #b0b8c4;">caracteres</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const btn = document.getElementById('traductor-btn');
+  const idiomaSelect = document.getElementById('traductor-idioma') as HTMLSelectElement;
+  const input = document.getElementById('traductor-input') as HTMLTextAreaElement;
+  const output = document.getElementById('traductor-output')!;
+  const loading = document.getElementById('traductor-loading')!;
+  const placeholder = document.getElementById('traductor-placeholder')!;
+  const copiarBtn = document.getElementById('traductor-copiar')!;
+  const stats = document.getElementById('traductor-stats')!;
+  const statTiempo = document.getElementById('traductor-tiempo')!;
+  const statCaracteres = document.getElementById('traductor-caracteres')!;
+
+  let resultadoTexto = '';
+
+  btn?.addEventListener('click', async () => {
+    const texto = input.value.trim();
+    if (!texto) return;
+
+    const idioma = idiomaSelect.value;
+
+    placeholder.classList.add('hidden');
+    loading.classList.remove('hidden');
+    copiarBtn.classList.add('hidden');
+    stats.classList.add('hidden');
+
+    const inicio = Date.now();
+
+    try {
+      const res = await fetch('/api/ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          texto,
+          accion: 'traducir',
+          metadata: { idioma }
+        }),
+      });
+
+      const data = await res.json();
+      const tiempo = ((Date.now() - inicio) / 1000).toFixed(1);
+      const caracteres = data.resultado.length;
+
+      resultadoTexto = data.resultado;
+      loading.classList.add('hidden');
+
+      output.innerHTML = '';
+      output.style.whiteSpace = 'pre-wrap';
+      output.style.color = '#E6EDF3';
+      output.appendChild(document.createTextNode(resultadoTexto));
+      output.appendChild(loading);
+
+      copiarBtn.classList.remove('hidden');
+      stats.classList.remove('hidden');
+      statTiempo.textContent = tiempo + 's';
+      statCaracteres.textContent = caracteres.toString();
+
+    } catch (e) {
+      loading.classList.add('hidden');
+      output.innerHTML = '<span class="text-red-400 mono text-xs">Error al traducir. Inténtalo de nuevo.</span>';
+    }
+  });
+
+  copiarBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText(resultadoTexto);
+    copiarBtn.textContent = '✓ copiado';
+    setTimeout(() => copiarBtn.textContent = 'copiar →', 2000);
+  });
+</script>
+
+<style>
+  .mono { font-family: 'DM Mono', monospace; }
+</style>

@@ -1,1 +1,61 @@
 @import "tailwindcss";
+
+:root {
+  /* Brand Colors */
+  --primary-dark: #0d3b66;
+  --primary: #2a5d94;
+  --primary-light: #589fb8;
+  --accent-mint: #8ddad2;
+  --highlight-lila: #a778be;
+  --bg-dark: #0B1120;
+  --text-light: #E6EDF3;
+  --text-secondary: #b0b8c4;
+}
+
+@layer base {
+  body {
+    @apply text-[#E6EDF3];
+    background: #030612;
+  }
+}
+
+@layer utilities {
+  .gradient-primary {
+    background: linear-gradient(135deg, #0d3b66 0%, #2a5d94 50%, #589fb8 100%);
+  }
+  
+  .gradient-primary-subtle {
+    background: linear-gradient(135deg, rgba(13, 59, 102, 0.15) 0%, rgba(42, 93, 148, 0.1) 100%);
+  }
+  
+  .btn-primary {
+    @apply py-3 px-4 rounded-lg font-medium transition-all duration-200;
+    background: linear-gradient(135deg, #2a5d94 0%, #589fb8 100%);
+    color: #E6EDF3;
+  }
+  
+  .btn-primary:hover {
+    @apply shadow-lg;
+    background: linear-gradient(135deg, #0d3b66 0%, #2a5d94 100%);
+  }
+  
+  .btn-cta {
+    @apply py-3 px-4 rounded-lg font-medium transition-all duration-200;
+    background-color: #8ddad2;
+    color: #0B1120;
+  }
+  
+  .btn-cta:hover {
+    background-color: #7dd0ca;
+    @apply shadow-lg;
+  }
+  
+  .border-blue {
+    border-color: #2a5d94;
+  }
+  
+  .border-blue:focus-within {
+    border-color: #8ddad2;
+    box-shadow: 0 0 0 2px rgba(141, 218, 210, 0.1);
+  }
+}
