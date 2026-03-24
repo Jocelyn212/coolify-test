@@ -5,8 +5,8 @@
   
   <!-- Header -->
   <div class="mb-6">
-    <h2 class="text-3xl font-extrabold tracking-tight mb-2" style="background: linear-gradient(135deg, #E6EDF3 0%, #8ddad2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Generador de Emails</h2>
-    <p class="mono text-sm" style="color: #b0b8c4;">Crea emails profesionales adaptados a tu necesidad.</p>
+    <h2 class="text-3xl font-extrabold tracking-tight mb-2 bg-gradient-to-r from-text-light to-accent-mint bg-clip-text text-transparent">Generador de Emails</h2>
+    <p class="mono text-sm text-text-secondary">Crea emails profesionales adaptados a tu necesidad.</p>
   </div>
 
   <!-- Grid -->
@@ -15,26 +15,20 @@
     <!-- Input -->
     <div class="flex flex-col gap-4">
       <div>
-        <label class="mono text-xs tracking-widest uppercase font-semibold" style="color: #8ddad2;">Asunto</label>
+        <label class="mono text-xs tracking-widest uppercase font-semibold text-accent-mint">Asunto</label>
         <input
           id="email-asunto"
           type="text"
           placeholder="Ej: Propuesta de colaboración"
-          class="w-full mt-2 border-2 rounded-lg p-3 text-sm focus:outline-none transition-all"
-          style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94; color: #E6EDF3;"
-          onfocus="this.style.borderColor='#8ddad2'; this.style.boxShadow='0 0 20px rgba(141, 218, 210, 0.2)'"
-          onblur="this.style.borderColor='#2a5d94'; this.style.boxShadow='none'"
+          class="w-full mt-2 border-2 border-primary rounded-lg p-3 text-sm focus:outline-none focus:border-accent-mint transition-all bg-primary/30 text-text-light placeholder:text-text-secondary"
         />
       </div>
 
       <div>
-        <label class="mono text-xs tracking-widest uppercase font-semibold" style="color: #8ddad2;">Tono</label>
+        <label class="mono text-xs tracking-widest uppercase font-semibold text-accent-mint">Tono</label>
         <select
           id="email-tono"
-          class="w-full mt-2 border-2 rounded-lg p-3 text-sm focus:outline-none transition-all"
-          style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94; color: #E6EDF3;"
-          onfocus="this.style.borderColor='#8ddad2'; this.style.boxShadow='0 0 20px rgba(141, 218, 210, 0.2)'"
-          onblur="this.style.borderColor='#2a5d94'; this.style.boxShadow='none'"
+          class="w-full mt-2 border-2 border-primary rounded-lg p-3 text-sm focus:outline-none focus:border-accent-mint transition-all bg-primary/30 text-text-light"
         >
           <option value="formal">Formal y profesional</option>
           <option value="semi-formal">Semi-formal</option>
@@ -43,23 +37,17 @@
       </div>
 
       <div>
-        <label class="mono text-xs tracking-widest uppercase font-semibold" style="color: #8ddad2;">Contenido</label>
+        <label class="mono text-xs tracking-widest uppercase font-semibold text-accent-mint">Contenido</label>
         <textarea
           id="email-input"
           placeholder="Describe qué quieres comunicar..."
-          class="w-full mt-2 min-h-50 border-2 rounded-xl p-4 text-sm resize-none focus:outline-none transition-all"
-          style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94; color: #E6EDF3;"
-          onfocus="this.style.borderColor='#8ddad2'; this.style.boxShadow='0 0 20px rgba(141, 218, 210, 0.2)'"
-          onblur="this.style.borderColor='#2a5d94'; this.style.boxShadow='none'"
+          class="w-full mt-2 min-h-50 border-2 border-primary rounded-xl p-4 text-sm resize-none focus:outline-none focus:border-accent-mint transition-all bg-primary/30 text-text-light placeholder:text-text-secondary"
         ></textarea>
       </div>
 
       <button
         id="email-btn"
-        class="mono text-sm py-3 px-4 rounded-lg transition-all font-medium text-zinc-950"
-        style="background-color: #8ddad2;"
-        onmouseover="this.style.backgroundColor='#7dd0ca'; this.style.boxShadow='0 10px 30px rgba(141, 218, 210, 0.3)'"
-        onmouseout="this.style.backgroundColor='#8ddad2'; this.style.boxShadow='none'"
+        class="mono text-sm py-3 px-4 rounded-lg transition-all font-medium text-zinc-950 bg-accent-mint hover:shadow-lg hover:bg-accent-mint/90"
       >
         ✓ Generar Email
       </button>
@@ -68,32 +56,32 @@
     <!-- Output -->
     <div class="flex flex-col gap-4">
       <div class="flex justify-between items-center">
-        <label class="mono text-xs tracking-widest uppercase font-semibold" style="color: #8ddad2;">Email generado</label>
-        <button id="email-copiar" class="mono text-sm transition-all font-medium hidden px-3 py-1 rounded" style="color: #E6EDF3; background: rgba(141, 218, 210, 0.15);" onmouseover="this.style.background='rgba(141, 218, 210, 0.25)'; this.style.color='#8ddad2'" onmouseout="this.style.background='rgba(141, 218, 210, 0.15)'; this.style.color='#E6EDF3'">
+        <label class="mono text-xs tracking-widest uppercase font-semibold text-accent-mint">Email generado</label>
+        <button id="email-copiar" class="mono text-sm transition-all font-medium hidden px-3 py-1 rounded text-text-light bg-accent-mint/15 hover:bg-accent-mint/25 hover:text-accent-mint">
           copiar →
         </button>
       </div>
 
-      <div id="email-output" class="relative min-h-60 border-2 rounded-xl p-4 text-sm leading-relaxed transition-all" style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94; color: #E6EDF3;">
-        <span id="email-placeholder" style="color: #b0b8c4;">El email aparecerá aquí...</span>
-        <div id="email-loading" class="absolute inset-0 items-center justify-center" style="display: none;">
+      <div id="email-output" class="relative min-h-60 border-2 rounded-xl p-4 text-sm leading-relaxed transition-all bg-gradient-to-br from-primary/30 to-bg-dark/80 border-primary text-text-light">
+        <span id="email-placeholder" class="text-text-secondary">El email aparecerá aquí...</span>
+        <div id="email-loading" class="absolute inset-0 items-center justify-center hidden">
           <div class="flex gap-1">
-            <span class="w-3 h-3 rounded-full animate-bounce" style="animation-delay:0s; background: linear-gradient(135deg, #2a5d94, #8ddad2);"></span>
-            <span class="w-3 h-3 rounded-full animate-bounce" style="animation-delay:0.15s; background: linear-gradient(135deg, #589fb8, #8ddad2);"></span>
-            <span class="w-3 h-3 rounded-full animate-bounce" style="animation-delay:0.3s; background: linear-gradient(135deg, #8ddad2, #589fb8);"></span>
+            <span class="w-3 h-3 rounded-full animate-bounce bg-gradient-primary" style="animation-delay:0s;"></span>
+            <span class="w-3 h-3 rounded-full animate-bounce bg-gradient-primary-subtle" style="animation-delay:0.15s;"></span>
+            <span class="w-3 h-3 rounded-full animate-bounce bg-accent-mint" style="animation-delay:0.3s;"></span>
           </div>
         </div>
       </div>
 
       <!-- Stats -->
-      <div id="email-stats" class="grid grid-cols-2 gap-2" style="display: none;">
-        <div class="border-2 rounded-lg p-4 transition-all" style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94;">
-          <div id="email-tiempo" class="text-lg font-bold" style="color: #8ddad2;">—</div>
-          <div class="mono text-xs uppercase tracking-widest mt-2" style="color: #b0b8c4;">segundos</div>
+      <div id="email-stats" class="grid grid-cols-2 gap-2 hidden">
+        <div class="border-2 border-primary rounded-lg p-4 transition-all bg-primary-dark/30">
+          <div id="email-tiempo" class="text-lg font-bold text-accent-mint">—</div>
+          <div class="mono text-xs uppercase tracking-widest mt-2 text-text-secondary">segundos</div>
         </div>
-        <div class="border-2 rounded-lg p-4 transition-all" style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94;">
-          <div id="email-palabras" class="text-lg font-bold" style="color: #589fb8;">—</div>
-          <div class="mono text-xs uppercase tracking-widest mt-2" style="color: #b0b8c4;">palabras</div>
+        <div class="border-2 border-primary rounded-lg p-4 transition-all bg-primary-dark/30">
+          <div id="email-palabras" class="text-lg font-bold text-primary-light">—</div>
+          <div class="mono text-xs uppercase tracking-widest mt-2 text-text-secondary">palabras</div>
         </div>
       </div>
     </div>
@@ -148,10 +136,8 @@
       loading.classList.add('hidden');
 
       output.innerHTML = '';
-      output.style.whiteSpace = 'pre-wrap';
-      output.classList.add('text-zinc-100');
+      output.className = 'relative min-h-60 border-2 rounded-xl p-4 text-sm leading-relaxed transition-all bg-gradient-to-br from-primary/30 to-bg-dark/80 border-primary text-text-light whitespace-pre-wrap';
       output.appendChild(document.createTextNode(resultadoTexto));
-      output.appendChild(loading);
 
       copiarBtn.classList.remove('hidden');
       stats.classList.remove('hidden');
@@ -170,7 +156,3 @@
     setTimeout(() => copiarBtn.textContent = 'copiar →', 2000);
   });
 </script>
-
-<style>
-  .mono { font-family: 'DM Mono', monospace; }
-</style>

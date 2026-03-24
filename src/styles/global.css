@@ -1,7 +1,18 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary-dark: #0d3b66;
+  --color-primary: #2a5d94;
+  --color-primary-light: #589fb8;
+  --color-accent-mint: #8ddad2;
+  --color-highlight-lila: #a778be;
+  --color-bg-dark: #0B1120;
+  --color-bg-deeper: #030612;
+  --color-text-light: #E6EDF3;
+  --color-text-secondary: #b0b8c4;
+}
+
 :root {
-  /* Brand Colors */
   --primary-dark: #0d3b66;
   --primary: #2a5d94;
   --primary-light: #589fb8;
@@ -14,48 +25,46 @@
 
 @layer base {
   body {
-    @apply text-[#E6EDF3];
-    background: #030612;
+    @apply text-text-light bg-bg-deeper;
   }
 }
 
 @layer utilities {
+  .mono {
+    font-family: 'DM Mono', monospace;
+  }
+
   .gradient-primary {
     background: linear-gradient(135deg, #0d3b66 0%, #2a5d94 50%, #589fb8 100%);
   }
-  
+
   .gradient-primary-subtle {
     background: linear-gradient(135deg, rgba(13, 59, 102, 0.15) 0%, rgba(42, 93, 148, 0.1) 100%);
   }
-  
+
   .btn-primary {
-    @apply py-3 px-4 rounded-lg font-medium transition-all duration-200;
+    @apply py-3 px-4 rounded-lg font-medium transition-all duration-200 text-text-light;
     background: linear-gradient(135deg, #2a5d94 0%, #589fb8 100%);
-    color: #E6EDF3;
   }
-  
+
   .btn-primary:hover {
     @apply shadow-lg;
     background: linear-gradient(135deg, #0d3b66 0%, #2a5d94 100%);
   }
-  
+
   .btn-cta {
-    @apply py-3 px-4 rounded-lg font-medium transition-all duration-200;
-    background-color: #8ddad2;
-    color: #0B1120;
+    @apply py-3 px-4 rounded-lg font-medium transition-all duration-200 bg-accent-mint text-bg-dark;
   }
-  
+
   .btn-cta:hover {
-    background-color: #7dd0ca;
-    @apply shadow-lg;
+    @apply shadow-lg bg-accent-mint/90;
   }
-  
+
   .border-blue {
-    border-color: #2a5d94;
+    @apply border-primary;
   }
-  
+
   .border-blue:focus-within {
-    border-color: #8ddad2;
-    box-shadow: 0 0 0 2px rgba(141, 218, 210, 0.1);
+    @apply border-accent-mint shadow-[0_0_0_2px_rgba(141,218,210,0.1)];
   }
 }

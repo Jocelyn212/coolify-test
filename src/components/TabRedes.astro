@@ -1,34 +1,32 @@
 ---
 ---
-
 <div class="flex flex-col gap-6">
-  
+
   <!-- Header -->
   <div class="mb-6">
-    <h2 class="text-3xl font-extrabold tracking-tight mb-2" style="background: linear-gradient(135deg, #E6EDF3 0%, #8ddad2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Posts para Redes Sociales</h2>
-    <p class="mono text-sm" style="color: #b0b8c4;">Adapta tu contenido a diferentes plataformas.</p>
+    <h2 class="text-3xl font-extrabold tracking-tight mb-2 bg-gradient-to-r from-text-light to-accent-mint bg-clip-text text-transparent">
+      Posts para Redes Sociales
+    </h2>
+    <p class="mono text-sm text-text-secondary">Adapta tu contenido a diferentes plataformas.</p>
   </div>
 
   <!-- Grid -->
   <div class="grid md:grid-cols-2 gap-6">
-    
+
     <!-- Input -->
     <div class="flex flex-col gap-4">
       <div>
-        <label class="mono text-xs tracking-widest uppercase font-semibold" style="color: #8ddad2;">Plataforma</label>
+        <label class="mono text-xs tracking-widest uppercase font-semibold text-accent-mint">Plataforma</label>
         <div class="grid grid-cols-2 gap-2 mt-2">
           {[
-            { id: 'twitter', label: '𝕏 Twitter/X', value: 'Twitter (máximo 280 caracteres, directo y viral)' },
-            { id: 'instagram', label: '📷 Instagram', value: 'Instagram (visual, emojis, hashtags, máximo 2200 caracteres)' },
-            { id: 'linkedin', label: '💼 LinkedIn', value: 'LinkedIn (profesional, detallado, networking)' },
-            { id: 'tiktok', label: '🎵 TikTok', value: 'TikTok (trending, casual, juvenil, máximo 150 caracteres)' },
-          ].map(({ id, label, value }) => (
+            { label: '𝕏 Twitter/X', value: 'Twitter (máximo 280 caracteres, directo y viral)' },
+            { label: '📷 Instagram', value: 'Instagram (visual, emojis, hashtags, máximo 2200 caracteres)' },
+            { label: '💼 LinkedIn', value: 'LinkedIn (profesional, detallado, networking)' },
+            { label: '🎵 TikTok', value: 'TikTok (trending, casual, juvenil, máximo 150 caracteres)' },
+          ].map(({ label, value }) => (
             <button
               data-plataforma={value}
-              class="plataforma-btn mono text-sm py-2 px-3 border-2 rounded-lg transition-all"
-              style="background: linear-gradient(135deg, rgba(42, 93, 148, 0.3) 0%, rgba(88, 159, 184, 0.2) 100%); border-color: #2a5d94; color: #589fb8;"
-              onmouseover="this.style.borderColor='#8ddad2'; this.style.color='#8ddad2'; this.style.background='linear-gradient(135deg, rgba(42, 93, 148, 0.5) 0%, rgba(88, 159, 184, 0.4) 100%)'"
-              onmouseout="this.style.borderColor='#2a5d94'; this.style.color='#589fb8'; this.style.background='linear-gradient(135deg, rgba(42, 93, 148, 0.3) 0%, rgba(88, 159, 184, 0.2) 100%)'"
+              class="plataforma-btn mono text-sm py-2 px-3 border-2 border-primary rounded-lg transition-all text-primary-light bg-primary/30 hover:border-accent-mint hover:text-accent-mint hover:bg-primary/50"
             >
               {label}
             </button>
@@ -37,22 +35,18 @@
       </div>
 
       <div>
-        <label class="mono text-xs tracking-widest uppercase font-semibold" style="color: #8ddad2;">Contenido original</label>
+        <label class="mono text-xs tracking-widest uppercase font-semibold text-accent-mint">Contenido original</label>
         <textarea
           id="redes-input"
           placeholder="Escribe o pega el contenido que quieres adaptar..."
-          class="w-full mt-2 min-h-55 border-2 rounded-xl p-4 text-sm resize-none focus:outline-none transition-all"
-          style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94; color: #E6EDF3;"
-          onfocus="this.style.borderColor='#8ddad2'; this.style.boxShadow='0 0 20px rgba(141, 218, 210, 0.2)'"
-          onblur="this.style.borderColor='#2a5d94'; this.style.boxShadow='none'"
+          class="w-full mt-2 min-h-48 border-2 border-primary rounded-xl p-4 text-sm resize-none focus:outline-none focus:border-accent-mint transition-all bg-primary/30 text-text-light placeholder:text-text-secondary"
         ></textarea>
       </div>
 
       <button
         id="redes-btn"
         disabled
-        class="mono text-sm py-3 px-4 rounded-lg transition-all font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-        style="background: linear-gradient(135deg, rgba(42, 93, 148, 0.5) 0%, rgba(88, 159, 184, 0.4) 100%); border: 2px solid #2a5d94; color: #589fb8;"
+        class="mono text-sm py-3 px-4 rounded-lg transition-all font-medium border-2 border-primary text-primary-light bg-primary/50 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         ↑ Generar Post
       </button>
@@ -61,34 +55,37 @@
     <!-- Output -->
     <div class="flex flex-col gap-4">
       <div class="flex justify-between items-center">
-        <label class="mono text-xs tracking-widest uppercase font-semibold" style="color: #8ddad2;">
+        <label class="mono text-xs tracking-widest uppercase font-semibold text-accent-mint">
           <span id="redes-plataforma-label">Post generado</span>
         </label>
-        <button id="redes-copiar" class="mono text-sm transition-all font-medium hidden px-3 py-1 rounded" style="color: #E6EDF3; background: rgba(141, 218, 210, 0.15);" onmouseover="this.style.background='rgba(141, 218, 210, 0.25)'; this.style.color='#8ddad2'" onmouseout="this.style.background='rgba(141, 218, 210, 0.15)'; this.style.color='#E6EDF3'">
+        <button id="redes-copiar" class="mono text-sm transition-all font-medium hidden px-3 py-1 rounded text-text-light bg-accent-mint/15 hover:bg-accent-mint/25 hover:text-accent-mint">
           copiar →
         </button>
       </div>
 
-      <div id="redes-output" class="relative min-h-60 border-2 rounded-xl p-4 text-sm leading-relaxed transition-all" style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94; color: #E6EDF3;">
-        <span id="redes-placeholder" style="color: #b0b8c4;">Selecciona una plataforma y genera tu post...</span>
-        <div id="redes-loading" class="absolute inset-0 items-center justify-center" style="display: none;">
+      <div
+        id="redes-output"
+        class="relative min-h-48 border-2 border-primary rounded-xl p-4 text-sm leading-relaxed text-text-light bg-primary-dark/30"
+      >
+        <span id="redes-placeholder" class="text-text-secondary">Selecciona una plataforma y genera tu post...</span>
+        <div id="redes-loading" class="absolute inset-0 items-center justify-center hidden">
           <div class="flex gap-1">
-            <span class="w-3 h-3 rounded-full animate-bounce" style="animation-delay:0s; background: linear-gradient(135deg, #2a5d94, #8ddad2);"></span>
-            <span class="w-3 h-3 rounded-full animate-bounce" style="animation-delay:0.15s; background: linear-gradient(135deg, #589fb8, #8ddad2);"></span>
-            <span class="w-3 h-3 rounded-full animate-bounce" style="animation-delay:0.3s; background: linear-gradient(135deg, #8ddad2, #589fb8);"></span>
+            <span class="w-3 h-3 rounded-full animate-bounce bg-primary" style="animation-delay:0s;"></span>
+            <span class="w-3 h-3 rounded-full animate-bounce bg-primary-light" style="animation-delay:0.15s;"></span>
+            <span class="w-3 h-3 rounded-full animate-bounce bg-accent-mint" style="animation-delay:0.3s;"></span>
           </div>
         </div>
       </div>
 
       <!-- Stats -->
-      <div id="redes-stats" class="grid grid-cols-2 gap-2" style="display: none;">
-        <div class="border-2 rounded-lg p-4 transition-all" style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94;">
-          <div id="redes-tiempo" class="text-lg font-bold" style="color: #8ddad2;">—</div>
-          <div class="mono text-xs uppercase tracking-widest mt-2" style="color: #b0b8c4;">segundos</div>
+      <div id="redes-stats" class="hidden grid grid-cols-2 gap-2">
+        <div class="border-2 border-primary rounded-lg p-4 bg-primary-dark/30">
+          <div id="redes-tiempo" class="text-lg font-bold text-accent-mint">—</div>
+          <div class="mono text-xs uppercase tracking-widest mt-2 text-text-secondary">segundos</div>
         </div>
-        <div class="border-2 rounded-lg p-4 transition-all" style="background: linear-gradient(135deg, rgba(13, 59, 102, 0.3) 0%, rgba(11, 17, 32, 0.8) 100%); border-color: #2a5d94;">
-          <div id="redes-caracteres" class="text-lg font-bold" style="color: #589fb8;">—</div>
-          <div class="mono text-xs uppercase tracking-widest mt-2" style="color: #b0b8c4;">caracteres</div>
+        <div class="border-2 border-primary rounded-lg p-4 bg-primary-dark/30">
+          <div id="redes-caracteres" class="text-lg font-bold text-primary-light">—</div>
+          <div class="mono text-xs uppercase tracking-widest mt-2 text-text-secondary">caracteres</div>
         </div>
       </div>
     </div>
@@ -96,7 +93,7 @@
 </div>
 
 <script>
-  const btn = document.getElementById('redes-btn');
+  const btn = document.getElementById('redes-btn') as HTMLButtonElement;
   const input = document.getElementById('redes-input') as HTMLTextAreaElement;
   const output = document.getElementById('redes-output')!;
   const loading = document.getElementById('redes-loading')!;
@@ -111,27 +108,22 @@
   let selectedPlatforma = '';
   let resultadoTexto = '';
 
-  platformaBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      platformaBtns.forEach(b => {
-        const htmlB = b as HTMLElement;
-        htmlB.style.borderColor = '#2a5d94';
-        htmlB.style.color = '#589fb8';
-        htmlB.style.background = 'linear-gradient(135deg, rgba(42, 93, 148, 0.3) 0%, rgba(88, 159, 184, 0.2) 100%)';
+  platformaBtns.forEach(b => {
+    b.addEventListener('click', () => {
+      platformaBtns.forEach(pb => {
+        pb.classList.remove('border-accent-mint', 'text-accent-mint', 'bg-accent-mint/25');
+        pb.classList.add('border-primary', 'text-primary-light', 'bg-primary/30');
       });
-      const htmlBtn = btn as HTMLElement;
-      htmlBtn.style.borderColor = '#8ddad2';
-      htmlBtn.style.color = '#8ddad2';
-      htmlBtn.style.background = 'linear-gradient(135deg, rgba(141, 218, 210, 0.25) 0%, rgba(88, 159, 184, 0.3) 100%)';
-      
-      selectedPlatforma = btn.getAttribute('data-plataforma') || '';
-      plataformaLabel.textContent = btn.textContent || 'Post generado';
-      
-      const generateBtn = document.getElementById('redes-btn') as HTMLButtonElement;
-      generateBtn.disabled = false;
-      generateBtn.style.borderColor = '#8ddad2';
-      generateBtn.style.color = '#8ddad2';
-      generateBtn.style.background = 'linear-gradient(135deg, rgba(141, 218, 210, 0.4) 0%, rgba(88, 159, 184, 0.3) 100%)';
+
+      b.classList.remove('border-primary', 'text-primary-light', 'bg-primary/30');
+      b.classList.add('border-accent-mint', 'text-accent-mint', 'bg-accent-mint/25');
+
+      selectedPlatforma = b.getAttribute('data-plataforma') || '';
+      plataformaLabel.textContent = b.textContent || 'Post generado';
+
+      btn.disabled = false;
+      btn.classList.remove('border-primary', 'text-primary-light');
+      btn.classList.add('border-accent-mint', 'text-accent-mint');
     });
   });
 
@@ -141,6 +133,7 @@
 
     placeholder.classList.add('hidden');
     loading.classList.remove('hidden');
+    loading.classList.add('flex');
     copiarBtn.classList.add('hidden');
     stats.classList.add('hidden');
 
@@ -150,8 +143,8 @@
       const res = await fetch('/api/ai', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          texto, 
+        body: JSON.stringify({
+          texto,
           accion: 'redes',
           metadata: { plataforma: selectedPlatforma }
         }),
@@ -163,12 +156,11 @@
 
       resultadoTexto = data.resultado;
       loading.classList.add('hidden');
+      loading.classList.remove('flex');
 
       output.innerHTML = '';
-      output.style.whiteSpace = 'pre-wrap';
-      output.classList.add('text-zinc-100');
+      output.className = 'relative min-h-48 border-2 border-primary rounded-xl p-4 text-sm leading-relaxed text-text-light bg-primary-dark/30 whitespace-pre-wrap';
       output.appendChild(document.createTextNode(resultadoTexto));
-      output.appendChild(loading);
 
       copiarBtn.classList.remove('hidden');
       stats.classList.remove('hidden');
@@ -177,6 +169,7 @@
 
     } catch (e) {
       loading.classList.add('hidden');
+      loading.classList.remove('flex');
       output.innerHTML = '<span class="text-red-400 mono text-xs">Error al generar el post. Inténtalo de nuevo.</span>';
     }
   });
@@ -187,7 +180,3 @@
     setTimeout(() => copiarBtn.textContent = 'copiar →', 2000);
   });
 </script>
-
-<style>
-  .mono { font-family: 'DM Mono', monospace; }
-</style>

@@ -5,10 +5,10 @@ import TabRedes from './TabRedes.astro';
 import TabTraductor from './TabTraductor.astro';
 ---
 
-<main class="pt-32 min-h-screen" style="background: #030612;">
+<main class="pt-32 min-h-screen bg-bg-deeper">
   
   <!-- Tab buttons -->
-  <div class="sticky top-0 z-40 backdrop-blur-md border-b border-zinc-800" style="background: rgba(3, 6, 18, 0.9);">
+  <div class="sticky top-0 z-40 backdrop-blur-md border-b border-zinc-800 bg-bg-deeper/90">
     <div class="max-w-5xl mx-auto px-4">
       <div class="flex overflow-x-auto scrollbar-none gap-1 py-2">
         {[
@@ -19,8 +19,7 @@ import TabTraductor from './TabTraductor.astro';
         ].map(tab => (
           <button
             data-tab={tab.id}
-            class="tab-btn shrink-0 mono text-xs px-4 py-2 rounded-lg border transition-all whitespace-nowrap"
-            style="border-color: #2a5d94; color: #E6EDF3; background: transparent; cursor: pointer;"
+            class="tab-btn shrink-0 mono text-xs px-4 py-2 rounded-lg border-2 transition-all whitespace-nowrap border-primary text-text-light bg-transparent hover:border-primary/50"
           >
             {tab.label}
           </button>
@@ -53,16 +52,13 @@ import TabTraductor from './TabTraductor.astro';
 
   function activateTab(id: string) {
     btns.forEach(btn => {
-      const htmlBtn = btn as HTMLElement;
       const isActive = btn.getAttribute('data-tab') === id;
       if (isActive) {
-        htmlBtn.style.borderColor = '#8ddad2';
-        htmlBtn.style.color = '#8ddad2';
-        htmlBtn.style.backgroundColor = 'rgba(141, 218, 210, 0.05)';
+        btn.classList.remove('border-primary', 'text-text-light', 'bg-transparent', 'hover:border-primary/50');
+        btn.classList.add('border-accent-mint', 'text-accent-mint', 'bg-accent-mint/10');
       } else {
-        htmlBtn.style.borderColor = '#2a5d94';
-        htmlBtn.style.color = '#E6EDF3';
-        htmlBtn.style.backgroundColor = 'transparent';
+        btn.classList.remove('border-accent-mint', 'text-accent-mint', 'bg-accent-mint/10');
+        btn.classList.add('border-primary', 'text-text-light', 'bg-transparent', 'hover:border-primary/50');
       }
     });
     contents.forEach(content => {
@@ -79,9 +75,3 @@ import TabTraductor from './TabTraductor.astro';
   // Activar primera pestaña por defecto
   activateTab('asistente');
 </script>
-
-<style>
-  .mono { font-family: 'DM Mono', monospace; }
-  .scrollbar-none::-webkit-scrollbar { display: none; }
-  .scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
-</style>
