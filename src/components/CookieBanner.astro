@@ -77,8 +77,9 @@
     script.src = 'https://www.googletagmanager.com/gtag/js?id=G-3MNXQKZ04L';
     document.head.appendChild(script);
 
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    (window as any).dataLayer = (window as any).dataLayer || [];
+    // @ts-ignore
+    function gtag(...args: any[]) { (window as any).dataLayer.push(arguments); }
     gtag('js', new Date());
     gtag('config', 'G-3MNXQKZ04L');
   }
