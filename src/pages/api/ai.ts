@@ -13,25 +13,59 @@ export async function POST({ request }: { request: Request }) {
     traducir: `Traduce este texto al ${metadata?.idioma || 'inglés'} de forma COHERENTE y NATURAL, no literal. Mantén el contexto, tono, significado real y expresividad del original. Evita traducciones palabra por palabra que pierdan el sentido. Adapta la expresión al estilo natural del ${metadata?.idioma || 'inglés'}. Devuelve SOLO la traducción sin explicaciones: "${texto}"`,
   };
 
-  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${import.meta.env.GROQ_API_KEY}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'llama-3.1-8b-instant',
-      messages: [{ role: 'user', content: prompts[accion] }],
-      max_tokens: 1024,
-      temperature: 0.3,
-    }),
-  });
+  try {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${import.meta.env.GROQ_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        messages: [{ role: 'user', content: prompts[accion] }],
+        max_tokens: 1024,
+        temperature: 0.3,
+      }),
+    });
 
-  const responseData = await response.json();
+    const responseData = await response.json();
 
-  return new Response(JSON.stringify({
-    resultado: responseData.choices[0].message.content
-  }), {
-    headers: { 'Content-Type': 'application/json' }
-  });
+    return new Response(JSON.stringify({
+      resultado: responseData.choices[0].message.content
+    }), {
+      headers: { 'Content-Type': 'application/json' }
+    });
+  } catch (groqError) {
+    console.warn('Groq falló, intentando OpenRouter...', groqError);
+
+    try {
+      const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.OPENROUTER_API_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'openrouter/free',
+          messages: [{ role: 'user', content: prompts[accion] }],
+          max_tokens: 1024,
+          temperature: 0.3,
+        }),
+      });
+
+      const responseData = await response.json();
+
+      return new Response(JSON.stringify({
+        resultado: responseData.choices[0].message.content
+      }), {
+        headers: { 'Content-Type': 'application/json' }
+      });
+    } catch (openRouterError) {
+      console.error('OpenRouter también falló', openRouterError);
+      return new Response(JSON.stringify({ error: 'Servicio no disponible' }), {
+        status: 503,
+        headers: { 'Content-Type': 'application/json' }
+      });
+    }
+  }
 }

@@ -1,0 +1,146 @@
+---
+---
+<div class="flex flex-col gap-6">
+  
+  <!-- Header -->
+  <div class="mb-6">
+    <h2 class="text-3xl font-extrabold tracking-tight mb-2 bg-linear-to-r from-text-light to-accent-mint bg-clip-text text-transparent">Chat con IA</h2>
+    <p class="mono text-sm text-text-secondary">Conversa con tu asistente IA para obtener respuestas y asesoría.</p>
+  </div>
+
+  <!-- Chat container -->
+  <div class="flex flex-col gap-6 bg-primary/20 border-2 border-primary rounded-xl p-6 min-h-[350px]">
+    
+    <!-- Header con botón limpiar -->
+    <div class="flex justify-between items-center">
+      <span class="mono text-xs uppercase tracking-widest font-semibold text-accent-mint">Conversación</span>
+      <button
+        id="chat-clear"
+        class="mono text-xs px-3 py-1 rounded transition-all font-medium text-accent-mint border border-accent-mint hover:bg-accent-mint/10 hover:opacity-90"
+      >
+        limpiar
+      </button>
+    </div>
+    
+    <!-- Messages -->
+    <div id="chat-messages" class="flex-1 overflow-y-auto space-y-3 min-h-[250px] p-4 bg-primary/10 rounded-lg border border-primary/30">
+      <div class="flex justify-start">
+        <div class="rounded-lg rounded-tl-none px-4 py-2 max-w-[80%] bg-primary">
+          <p class="text-sm text-text-light">¡Hola! Soy tu asistente IA. ¿Cómo puedo ayudarte?</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input -->
+    <form id="chat-form" class="flex gap-2 mt-6">
+      <input
+        id="chat-input"
+        type="text"
+        placeholder="Escribe tu pregunta..."
+        class="flex-1 border-2 border-primary rounded-lg px-4 py-3 text-base focus:outline-none focus:border-accent-mint transition-colors bg-primary/30 text-text-light placeholder:text-text-secondary"
+        autocomplete="off"
+      />
+      <button
+        type="submit"
+        class="font-bold px-6 py-3 rounded-lg transition-all hover:opacity-80 mono text-sm text-bg-dark flex-shrink-0 bg-accent-mint border-2 border-accent-mint"
+      >
+        enviar →
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  const messagesContainer = document.getElementById('chat-messages')!;
+  const form = document.getElementById('chat-form')!;
+  const chatInput = document.getElementById('chat-input') as HTMLInputElement;
+
+  const scrollToBottom = () => {
+    setTimeout(() => {
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }, 50);
+  };
+
+  const addMessage = (texto: string, esUsuario: boolean) => {
+    const wrapper = document.createElement('div');
+    wrapper.className = `flex ${esUsuario ? 'justify-end' : 'justify-start'}`;
+
+    const bubble = document.createElement('div');
+    bubble.className = `px-4 py-2 max-w-[80%] text-sm rounded-lg ${
+      esUsuario
+        ? 'bg-accent-mint text-bg-dark rounded-br-none font-medium'
+        : 'bg-primary text-text-light rounded-bl-none'
+    }`;
+    bubble.innerHTML = `<p class="whitespace-pre-wrap">${texto}</p>`;
+
+    wrapper.appendChild(bubble);
+    messagesContainer.appendChild(wrapper);
+    scrollToBottom();
+    return wrapper;
+  };
+
+  const addLoading = () => {
+    const wrapper = document.createElement('div');
+    wrapper.className = 'flex justify-start';
+    wrapper.innerHTML = `
+      <div class="px-4 py-2 bg-primary rounded-lg rounded-bl-none">
+        <div class="flex gap-1">
+          <span class="w-2 h-2 rounded-full animate-bounce bg-accent-mint" style="animation-delay:0s;"></span>
+          <span class="w-2 h-2 rounded-full animate-bounce bg-accent-mint" style="animation-delay:0.15s;"></span>
+          <span class="w-2 h-2 rounded-full animate-bounce bg-accent-mint" style="animation-delay:0.3s;"></span>
+        </div>
+      </div>
+    `;
+    messagesContainer.appendChild(wrapper);
+    scrollToBottom();
+    return wrapper;
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const mensaje = chatInput.value.trim();
+    if (!mensaje) return;
+
+    addMessage(mensaje, true);
+    chatInput.value = '';
+
+    const loadingEl = addLoading();
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mensaje }),
+      });
+
+      const data = await res.json();
+      loadingEl.remove();
+      addMessage(data.respuesta, false);
+
+    } catch (err) {
+      loadingEl.remove();
+      addMessage('Error al conectar. Inténtalo de nuevo.', false);
+    }
+  });
+
+  // Botón limpiar chat
+  const clearBtn = document.getElementById('chat-clear')!;
+  clearBtn.addEventListener('click', () => {
+    messagesContainer.innerHTML = '';
+    addMessage('¡Hola! Soy tu asistente IA. ¿Cómo puedo ayudarte?', false);
+    chatInput.focus();
+  });
+</script>
+
+<style>
+  #chat-messages {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) transparent;
+  }
+  #chat-messages::-webkit-scrollbar { width: 4px; }
+  #chat-messages::-webkit-scrollbar-track { background: transparent; }
+  #chat-messages::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 3px;
+  }
+</style>

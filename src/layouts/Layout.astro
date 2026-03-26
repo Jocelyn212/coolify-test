@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css' 
+import CookieBanner from '../components/CookieBanner.astro';
 ---
 <!doctype html>
 <html lang="en">
@@ -8,10 +9,11 @@ import '../styles/global.css'
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/png" href="https://res.cloudinary.com/pruebaweb/image/upload/v1764994533/web%20JCtechStudio/logoJCTechStudio-3_kwsqey.png" />
 		<meta name="generator" content={Astro.generator} />
-		<title>JCTechStudio - Herramientas IA</title>
+		</script>
 	</head>
 	<body class="bg-bg-deeper">
 		<slot />
+		<CookieBanner />
 	</body>
 </html>
 

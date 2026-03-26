@@ -1,5 +1,6 @@
 ---
 import TabAsistente from './TabAsistente.astro';
+import TabChat from './TabChat.astro';
 import TabEmail from './TabEmail.astro';
 import TabRedes from './TabRedes.astro';
 import TabTraductor from './TabTraductor.astro';
@@ -16,6 +17,7 @@ import TabTraductor from './TabTraductor.astro';
           { id: 'email', label: '✉ Email' },
           { id: 'redes', label: '◎ Redes' },
           { id: 'traductor', label: '⇄ Traducir' },
+          { id: 'chat', label: '💬 Chat' },
         ].map(tab => (
           <button
             data-tab={tab.id}
@@ -32,6 +34,9 @@ import TabTraductor from './TabTraductor.astro';
   <div class="max-w-5xl mx-auto px-4 py-8">
     <div id="tab-asistente" class="tab-content">
       <TabAsistente />
+    </div>
+    <div id="tab-chat" class="tab-content hidden">
+      <TabChat />
     </div>
     <div id="tab-email" class="tab-content hidden">
       <TabEmail />

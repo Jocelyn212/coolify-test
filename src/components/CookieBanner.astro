@@ -1,0 +1,102 @@
+---
+---
+
+<!-- Overlay bloqueante -->
+<div id="cookie-overlay" class="fixed inset-0 bg-black/60 z-40"></div>
+
+<!-- Banner centrado y bloqueante -->
+<div id="cookie-banner" class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 bg-white border border-gray-300 shadow-2xl rounded-lg max-w-md w-[90%]">
+  <div class="px-8 py-8">
+    <div class="flex flex-col gap-6">
+      <div>
+        <p class="text-lg text-gray-900 mb-4 font-semibold">
+          🍪 Consentimiento de Cookies
+        </p>
+        <p class="text-sm text-gray-700 leading-relaxed">
+          Utilizamos Google Analytics para entender cómo usas nuestras herramientas y mejorar tu experiencia. 
+          <a href="https://www.jctechstudio.es/politica-privacidad" target="_blank" class="underline text-blue-600 hover:text-blue-800">
+            Ver política de privacidad
+          </a>
+        </p>
+      </div>
+      <div class="flex gap-3 justify-end">
+        <button 
+          id="cookie-reject"
+          class="px-5 py-2.5 text-sm rounded-lg border border-gray-400 text-gray-700 hover:text-gray-900 hover:border-gray-600 transition-colors font-medium"
+        >
+          Rechazar
+        </button>
+        <button 
+          id="cookie-accept"
+          class="px-5 py-2.5 text-sm rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition-colors font-medium"
+        >
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const cookieName = 'jctechstudio-cookies-accepted';
+  const banner = document.getElementById('cookie-banner')!;
+  const overlay = document.getElementById('cookie-overlay')!;
+  const acceptBtn = document.getElementById('cookie-accept')!;
+  const rejectBtn = document.getElementById('cookie-reject')!;
+
+  // Verificar si ya tiene cookie
+  const hasConsent = localStorage.getItem(cookieName);
+
+  if (hasConsent) {
+    banner.style.display = 'none';
+    overlay.style.display = 'none';
+    if (hasConsent === 'true') {
+      loadGoogleAnalytics();
+    }
+  }
+
+  // Aceptar cookies
+  acceptBtn.addEventListener('click', () => {
+    localStorage.setItem(cookieName, 'true');
+    banner.style.display = 'none';
+    overlay.style.display = 'none';
+    loadGoogleAnalytics();
+  });
+
+  // Rechazar cookies
+  rejectBtn.addEventListener('click', () => {
+    localStorage.setItem(cookieName, 'false');
+    banner.style.display = 'none';
+    overlay.style.display = 'none';
+  });
+
+  function loadGoogleAnalytics() {
+    // Google tag (gtag.js) - Código oficial de Google
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=G-3MNXQKZ04L';
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-3MNXQKZ04L');
+  }
+</script>
+
+<style>
+  #cookie-banner {
+    animation: popIn 0.3s ease-out;
+  }
+
+  @keyframes popIn {
+    from {
+      transform: translate(-50%, -50%) scale(0.9);
+      opacity: 0;
+    }
+    to {
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 1;
+    }
+  }
+</style>
