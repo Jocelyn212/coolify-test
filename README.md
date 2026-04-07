@@ -44,3 +44,7 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+
+## Variables opcionales
+
+- `PAGESPEED_API_KEY`: clave opcional para usar PageSpeed Insights con mayor cuota en el auditor Lighthouse.

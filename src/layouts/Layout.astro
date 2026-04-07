@@ -1,18 +1,56 @@
 ---
 import '../styles/global.css' 
 import CookieBanner from '../components/CookieBanner.astro';
+
+const siteTitle = 'JC Tech Studio';
+const siteDescription = 'Herramientas web para analizar y mejorar rendimiento, SEO y experiencia de usuario.';
+const canonicalUrl = Astro.url.href;
+const socialImage = 'https://res.cloudinary.com/pruebaweb/image/upload/v1764994533/web%20JCtechStudio/logoJCTechStudio-3_kwsqey.png';
 ---
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/png" href="https://res.cloudinary.com/pruebaweb/image/upload/v1764994533/web%20JCtechStudio/logoJCTechStudio-3_kwsqey.png" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>{siteTitle}</title>
+		<meta name="description" content={siteDescription} />
+		<meta name="robots" content="index,follow" />
+		<meta name="theme-color" content="#0B1120" />
+		<link rel="canonical" href={canonicalUrl} />
+		<meta property="og:title" content={siteTitle} />
+		<meta property="og:description" content={siteDescription} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={socialImage} />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={siteTitle} />
+		<meta name="twitter:description" content={siteDescription} />
+		<meta name="twitter:image" content={socialImage} />
+		<link rel="icon" type="image/png" href={socialImage} />
 		<meta name="generator" content={Astro.generator} />
-		</script>
 	</head>
 	<body class="bg-bg-deeper">
+		<aside class="mx-auto max-w-5xl px-4 pt-4">
+			<div class="rounded-2xl border border-accent-mint/20 bg-accent-mint/5 px-4 py-3 text-sm text-text-light flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+				<p class="leading-relaxed">
+					¿Quieres una de estas herramientas integrada en tu propia web?
+				</p>
+				<a class="font-semibold text-accent-mint hover:text-accent-mint/80 transition-colors" href="https://www.jctechstudio.es/tipos-de-web">
+					Descubre qué tipo de web te conviene →
+				</a>
+			</div>
+		</aside>
 		<slot />
+		<aside class="mx-auto max-w-5xl px-4 pb-4">
+			<div class="rounded-2xl border border-accent-mint/20 bg-accent-mint/5 px-4 py-3 text-sm text-text-light flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+				<p class="leading-relaxed">
+					¿Quieres una de estas herramientas integrada en tu propia web?
+				</p>
+				<a class="font-semibold text-accent-mint hover:text-accent-mint/80 transition-colors" href="https://www.jctechstudio.es/tipos-de-web">
+					Descubre qué tipo de web te conviene →
+				</a>
+			</div>
+		</aside>
 		<CookieBanner />
 	</body>
 </html>

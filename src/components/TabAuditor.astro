@@ -1,0 +1,322 @@
+---
+---
+<div class="flex flex-col gap-6">
+  <div class="mb-2">
+    <h2 class="text-3xl font-extrabold tracking-tight mb-2 bg-linear-to-r from-text-light to-accent-mint bg-clip-text text-transparent">Auditor Web Gratis</h2>
+    <p class="mono text-sm text-text-secondary">Descubre en segundos como de rapida, segura y visible es tu web actual con un informe basado en Lighthouse.</p>
+  </div>
+
+  <div class="border-2 border-primary rounded-xl p-4 md:p-6 bg-primary/20">
+    <p class="mono text-xs md:text-sm text-text-secondary leading-relaxed mb-4">
+      Introduce la URL de tu pagina web y te dare un informe rapido de: velocidad de carga, como se ve en movil,
+      problemas basicos de SEO y una puntuacion general.
+    </p>
+
+    <div class="grid gap-3 md:grid-cols-[1fr_auto]">
+      <input
+        id="auditor-url"
+        type="url"
+        placeholder="https://tunegocio.es"
+        class="w-full border-2 border-primary rounded-xl p-4 text-base focus:outline-none focus:border-accent-mint transition-all bg-primary/30 text-text-light placeholder:text-text-secondary"
+      />
+      <button
+        id="auditor-submit"
+        class="btn-primary px-6 py-4 rounded-xl mono text-sm font-semibold tracking-wide"
+      >
+        Analizar mi web
+      </button>
+    </div>
+
+    <p id="auditor-error" class="mono text-xs text-red-400 mt-3 hidden"></p>
+  </div>
+
+  <div id="auditor-loading" class="hidden border-2 border-primary rounded-xl p-8 bg-primary/20">
+    <div class="flex items-center gap-2">
+      <span class="w-3 h-3 rounded-full animate-bounce bg-primary" style="animation-delay:0s;"></span>
+      <span class="w-3 h-3 rounded-full animate-bounce bg-primary-light" style="animation-delay:0.15s;"></span>
+      <span class="w-3 h-3 rounded-full animate-bounce bg-accent-mint" style="animation-delay:0.3s;"></span>
+      <span class="mono text-xs text-text-secondary ml-2">Analizando tu web...</span>
+    </div>
+  </div>
+
+  <div id="auditor-result" class="hidden flex-col gap-4">
+    <div class="border-2 border-primary rounded-xl p-4 md:p-6 bg-primary/20">
+      <div class="flex items-center justify-between gap-4 flex-wrap">
+        <p class="mono text-xs uppercase tracking-widest text-text-secondary">Puntuacion general</p>
+        <div id="auditor-score-pill" class="text-xl font-extrabold px-4 py-2 rounded-lg border-2 border-primary">--/100</div>
+      </div>
+    </div>
+
+    <div class="border-2 border-accent-mint rounded-xl p-4 md:p-6 bg-accent-mint/10">
+      <h3 class="font-bold text-lg mb-3 text-accent-mint">Resumen rapido para tu negocio</h3>
+      <p class="mono text-xs text-text-secondary mb-3">Este resumen traduce el analisis tecnico a decisiones claras.</p>
+      <ul id="auditor-summary" class="list-disc list-inside text-text-light space-y-2"></ul>
+      <a
+        href="https://www.jctechstudio.es/tipos-de-web"
+        class="inline-flex items-center gap-2 btn-cta rounded-xl px-5 py-3 mt-4"
+      >
+        Quiero mejorar mi web
+        <span>→</span>
+      </a>
+    </div>
+
+    <div class="grid md:grid-cols-4 gap-3">
+      <div class="border-2 border-primary rounded-xl p-4 bg-primary/20">
+        <p class="mono text-xs uppercase tracking-widest text-text-secondary">Rendimiento</p>
+        <p id="auditor-performance" class="text-2xl font-bold mt-2">--</p>
+      </div>
+      <div class="border-2 border-primary rounded-xl p-4 bg-primary/20">
+        <p class="mono text-xs uppercase tracking-widest text-text-secondary">Mobile Friendly</p>
+        <p id="auditor-mobile" class="text-2xl font-bold mt-2">--</p>
+      </div>
+      <div class="border-2 border-primary rounded-xl p-4 bg-primary/20">
+        <p class="mono text-xs uppercase tracking-widest text-text-secondary">SEO basico</p>
+        <p id="auditor-seo" class="text-2xl font-bold mt-2">--</p>
+      </div>
+      <div class="border-2 border-primary rounded-xl p-4 bg-primary/20">
+        <p class="mono text-xs uppercase tracking-widest text-text-secondary">Best Practices</p>
+        <p id="auditor-best-practices" class="text-2xl font-bold mt-2">--</p>
+      </div>
+    </div>
+
+    <details class="border-2 border-primary rounded-xl p-4 md:p-6 bg-primary/20">
+      <summary class="cursor-pointer font-semibold text-text-light">Ver detalle tecnico completo del analisis</summary>
+      <p class="mono text-xs text-text-secondary mt-3 mb-4">Este bloque es opcional y te da el detalle de rendimiento para revisar mejoras puntuales.</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+        <div class="rounded-lg border border-primary/60 p-3">
+          <p class="font-semibold text-text-light">Primer contenido visible</p>
+          <p class="mono text-xs text-text-secondary mt-1">Cuanto tarda en aparecer algo en pantalla para que el usuario note que la web ya cargó.</p>
+          <p id="auditor-fcp" class="font-semibold mt-2">--</p>
+        </div>
+        <div class="rounded-lg border border-primary/60 p-3">
+          <p class="font-semibold text-text-light">Elemento principal visible</p>
+          <p class="mono text-xs text-text-secondary mt-1">Cuanto tarda en verse el bloque mas importante de la pagina, como el titulo o la imagen principal.</p>
+          <p id="auditor-lcp" class="font-semibold mt-2">--</p>
+        </div>
+        <div class="rounded-lg border border-primary/60 p-3">
+          <p class="font-semibold text-text-light">Bloqueo por JavaScript</p>
+          <p class="mono text-xs text-text-secondary mt-1">Cuanto tiempo la pagina se queda ocupada y no deja responder con fluidez.</p>
+          <p id="auditor-tbt" class="font-semibold mt-2">--</p>
+        </div>
+        <div class="rounded-lg border border-primary/60 p-3">
+          <p class="font-semibold text-text-light">Saltos visuales</p>
+          <p class="mono text-xs text-text-secondary mt-1">Mide si la pagina se mueve sola mientras carga, algo molesto para leer o pulsar botones.</p>
+          <p id="auditor-cls" class="font-semibold mt-2">--</p>
+        </div>
+        <div class="rounded-lg border border-primary/60 p-3">
+          <p class="font-semibold text-text-light">Velocidad percibida</p>
+          <p class="mono text-xs text-text-secondary mt-1">Indica lo rapido que el usuario siente que se va mostrando la pagina.</p>
+          <p id="auditor-si" class="font-semibold mt-2">--</p>
+        </div>
+        <div class="rounded-lg border border-primary/60 p-3">
+          <p class="font-semibold text-text-light">Respuesta al tocar o escribir</p>
+          <p class="mono text-xs text-text-secondary mt-1">Mide si la web responde rapido cuando alguien hace clic, toca o escribe.</p>
+          <p id="auditor-inp" class="font-semibold mt-2">--</p>
+        </div>
+        <div class="rounded-lg border border-primary/60 p-3 md:col-span-2">
+          <p class="font-semibold text-text-light">Tiempo hasta empezar a responder</p>
+          <p class="mono text-xs text-text-secondary mt-1">Cuanto tarda el servidor en entregar la primera respuesta util al navegador.</p>
+          <p id="auditor-ttfb" class="font-semibold mt-2">--</p>
+        </div>
+      </div>
+
+      <div class="border-2 border-primary rounded-xl p-4 md:p-6 bg-primary/20 mt-4">
+        <h3 class="font-bold text-lg mb-3">Oportunidades de mejora</h3>
+        <ul id="auditor-opportunities" class="list-disc list-inside text-text-secondary space-y-2"></ul>
+      </div>
+
+      <div class="border-2 border-primary rounded-xl p-4 md:p-6 bg-primary/20 mt-4">
+        <h3 class="font-bold text-lg mb-3">Problemas encontrados</h3>
+        <ul id="auditor-issues" class="list-disc list-inside text-text-secondary space-y-2"></ul>
+      </div>
+
+      <div class="border-2 border-accent-mint rounded-xl p-4 md:p-6 bg-accent-mint/10 mt-4">
+        <h3 class="font-bold text-lg mb-3 text-accent-mint">Recomendaciones claras</h3>
+        <ul id="auditor-recommendations" class="list-disc list-inside text-text-light space-y-2"></ul>
+      </div>
+    </details>
+
+    <div class="border-2 border-primary rounded-xl p-4 md:p-6 bg-primary/20">
+      <p class="font-semibold text-lg leading-snug mb-4">
+        ¿Quieres que tu web cargue mas rapido, se vea perfecta en movil y aparezca mejor en Google?
+      </p>
+      <a
+        href="https://www.jctechstudio.es/tipos-de-web"
+        class="inline-flex items-center gap-2 btn-cta rounded-xl px-5 py-3"
+      >
+        Pide un presupuesto personalizado
+        <span>→</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  const urlInput = document.getElementById('auditor-url') as HTMLInputElement;
+  const submitBtn = document.getElementById('auditor-submit') as HTMLButtonElement;
+  const errorEl = document.getElementById('auditor-error') as HTMLParagraphElement;
+  const loadingEl = document.getElementById('auditor-loading') as HTMLDivElement;
+  const resultEl = document.getElementById('auditor-result') as HTMLDivElement;
+  const scorePillEl = document.getElementById('auditor-score-pill') as HTMLDivElement;
+  const summaryEl = document.getElementById('auditor-summary') as HTMLUListElement;
+  const performanceEl = document.getElementById('auditor-performance') as HTMLParagraphElement;
+  const mobileEl = document.getElementById('auditor-mobile') as HTMLParagraphElement;
+  const seoEl = document.getElementById('auditor-seo') as HTMLParagraphElement;
+  const bestPracticesEl = document.getElementById('auditor-best-practices') as HTMLParagraphElement;
+  const fcpEl = document.getElementById('auditor-fcp') as HTMLParagraphElement;
+  const lcpEl = document.getElementById('auditor-lcp') as HTMLParagraphElement;
+  const tbtEl = document.getElementById('auditor-tbt') as HTMLParagraphElement;
+  const clsEl = document.getElementById('auditor-cls') as HTMLParagraphElement;
+  const siEl = document.getElementById('auditor-si') as HTMLParagraphElement;
+  const inpEl = document.getElementById('auditor-inp') as HTMLParagraphElement;
+  const ttfbEl = document.getElementById('auditor-ttfb') as HTMLParagraphElement;
+  const opportunitiesEl = document.getElementById('auditor-opportunities') as HTMLUListElement;
+  const issuesEl = document.getElementById('auditor-issues') as HTMLUListElement;
+  const recommendationsEl = document.getElementById('auditor-recommendations') as HTMLUListElement;
+
+  function scoreClass(score: number) {
+    if (score >= 80) return 'border-emerald-400 text-emerald-300 bg-emerald-500/10';
+    if (score >= 60) return 'border-amber-400 text-amber-300 bg-amber-500/10';
+    return 'border-red-400 text-red-300 bg-red-500/10';
+  }
+
+  function scoreText(score: number) {
+    if (score >= 80) return 'Muy bien';
+    if (score >= 60) return 'Mejorable';
+    return 'Urgente';
+  }
+
+  function setList(target: HTMLUListElement, items: string[]) {
+    target.innerHTML = '';
+    items.forEach((item) => {
+      const li = document.createElement('li');
+      li.textContent = item;
+      target.appendChild(li);
+    });
+  }
+
+  submitBtn.addEventListener('click', async () => {
+    const websiteUrl = urlInput.value.trim();
+    errorEl.classList.add('hidden');
+    resultEl.classList.add('hidden');
+
+    if (!websiteUrl) {
+      errorEl.textContent = 'Introduce una URL valida para continuar.';
+      errorEl.classList.remove('hidden');
+      return;
+    }
+
+    loadingEl.classList.remove('hidden');
+    submitBtn.disabled = true;
+
+    try {
+      const response = await fetch('/api/auditor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: websiteUrl }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.error || 'No se pudo completar el analisis.');
+      }
+
+      const total = data?.scores?.total ?? 0;
+      const performance = data?.scores?.performance ?? 0;
+      const mobile = data?.scores?.mobile ?? 0;
+      const seo = data?.scores?.seo ?? 0;
+      const bestPractices = data?.scores?.bestPractices ?? 0;
+      const issues = data.issues || ['No se detectaron problemas graves.'];
+
+      scorePillEl.textContent = `${total}/100 · ${scoreText(total)}`;
+      scorePillEl.className = `text-xl font-extrabold px-4 py-2 rounded-lg border-2 ${scoreClass(total)}`;
+
+      const summary: string[] = [];
+      const areaScores = [
+        { label: 'rendimiento', value: performance },
+        { label: 'movil', value: mobile },
+        { label: 'seo', value: seo },
+        { label: 'buenas practicas', value: bestPractices },
+      ];
+      const weakestArea = areaScores.reduce((min, current) => current.value < min.value ? current : min, areaScores[0]);
+      const firstIssue = issues[0] || '';
+      const hasRealIssue = !firstIssue.toLowerCase().includes('no se detectaron problemas');
+      const hasLowArea = weakestArea.value < 80;
+
+      const statusText = !hasRealIssue && !hasLowArea && total >= 85
+        ? 'Estado general: Bien. Tu web tiene una base solida.'
+        : total >= 70
+          ? 'Estado general: Bien, con mejoras puntuales.'
+          : total >= 50
+            ? 'Estado general: Mejorable. Hay puntos que estan frenando resultados.'
+            : 'Estado general: Critico. Conviene actuar cuanto antes para no perder clientes.';
+
+      let priorityText = 'No se detectan puntos urgentes en esta revision.';
+      if (hasRealIssue) {
+        priorityText = firstIssue;
+      } else if (hasLowArea) {
+        if (weakestArea.label === 'rendimiento') {
+          priorityText = 'Subir velocidad de carga para reducir abandono de usuarios.';
+        } else if (weakestArea.label === 'movil') {
+          priorityText = 'Mejorar experiencia movil para convertir mejor en telefonos.';
+        } else if (weakestArea.label === 'seo') {
+          priorityText = 'Reforzar SEO basico para ganar visibilidad en Google.';
+        } else {
+          priorityText = 'Ajustar buenas practicas tecnicas para mejorar calidad global.';
+        }
+      }
+
+      const impactText = !hasRealIssue && !hasLowArea
+        ? 'Impacto en negocio: base saludable, con ajustes finos puedes convertir aun mejor.'
+        : weakestArea.label === 'rendimiento'
+          ? 'Impacto en negocio: la lentitud puede hacer que mas usuarios abandonen antes de contactar.'
+          : weakestArea.label === 'movil'
+            ? 'Impacto en negocio: en movil se pueden perder contactos por mala experiencia de uso.'
+            : weakestArea.label === 'seo'
+              ? 'Impacto en negocio: menor visibilidad en buscadores y menos visitas cualificadas.'
+              : 'Impacto en negocio: hay margen tecnico para mejorar confianza y estabilidad del sitio.';
+
+      const actionText = !hasRealIssue && !hasLowArea
+        ? 'Accion recomendada: mantenimiento mensual y optimizacion ligera para seguir creciendo.'
+        : 'Accion recomendada: ejecutar mejoras en el area prioritaria y volver a medir en 7 dias.';
+
+      summary.push(statusText);
+      summary.push(`Prioridad 1: ${priorityText}`);
+      summary.push(impactText);
+      summary.push(actionText);
+
+      setList(summaryEl, summary);
+
+      performanceEl.textContent = `${performance}/100`;
+      mobileEl.textContent = `${mobile}/100`;
+      seoEl.textContent = `${seo}/100`;
+      bestPracticesEl.textContent = `${bestPractices}/100`;
+
+      fcpEl.textContent = data?.metrics?.fcp || 'N/D';
+      lcpEl.textContent = data?.metrics?.lcp || 'N/D';
+      tbtEl.textContent = data?.metrics?.tbt || 'N/D';
+      clsEl.textContent = data?.metrics?.cls || 'N/D';
+      siEl.textContent = data?.metrics?.si || 'N/D';
+      inpEl.textContent = data?.metrics?.inp || 'N/D';
+      ttfbEl.textContent = data?.metrics?.ttfb || 'N/D';
+
+      const opportunities = Array.isArray(data.opportunities) ? data.opportunities : [];
+      setList(opportunitiesEl, opportunities.length > 0 ? opportunities : ['No hay oportunidades destacadas en esta medicion.']);
+
+      setList(issuesEl, issues);
+      setList(recommendationsEl, data.recommendations || ['Tu web esta en buen estado general.']);
+
+      resultEl.classList.remove('hidden');
+      resultEl.classList.add('flex');
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Error inesperado al analizar la web.';
+      errorEl.textContent = message;
+      errorEl.classList.remove('hidden');
+    } finally {
+      loadingEl.classList.add('hidden');
+      submitBtn.disabled = false;
+    }
+  });
+</script>
