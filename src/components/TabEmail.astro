@@ -5,7 +5,7 @@
   
   <!-- Header -->
   <div class="mb-6">
-    <h2 class="text-3xl font-extrabold tracking-tight mb-2 bg-gradient-to-r from-text-light to-accent-mint bg-clip-text text-transparent">Generador de Emails</h2>
+    <h2 class="text-3xl font-extrabold tracking-tight mb-2 bg-linear-to-r from-text-light to-accent-mint bg-clip-text text-transparent">Generador de Emails</h2>
     <p class="mono text-sm text-text-secondary">Crea emails profesionales adaptados a tu necesidad.</p>
   </div>
 
@@ -57,12 +57,20 @@
     <div class="flex flex-col gap-4">
       <div class="flex justify-between items-center">
         <label class="mono text-xs tracking-widest uppercase font-semibold text-accent-mint">Email generado</label>
-        <button id="email-copiar" class="mono text-sm transition-all font-medium hidden px-3 py-1 rounded text-text-light bg-accent-mint/15 hover:bg-accent-mint/25 hover:text-accent-mint">
-          copiar →
-        </button>
+        <div class="flex items-center gap-2">
+          <button id="email-copiar" class="mono text-sm transition-all font-medium hidden px-3 py-1 rounded text-text-light bg-accent-mint/15 hover:bg-accent-mint/25 hover:text-accent-mint items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 10h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            copiar
+          </button>
+          <button id="email-limpiar" class="mono text-sm transition-all font-medium px-3 py-1 rounded text-text-light bg-primary/40 hover:bg-primary/60">
+            limpiar
+          </button>
+        </div>
       </div>
 
-      <div id="email-output" class="relative min-h-60 border-2 rounded-xl p-4 text-sm leading-relaxed transition-all bg-gradient-to-br from-primary/30 to-bg-dark/80 border-primary text-text-light">
+      <div id="email-output" class="relative min-h-60 border-2 rounded-xl p-4 text-sm leading-relaxed transition-all bg-linear-to-br from-primary/30 to-bg-dark/80 border-primary text-text-light">
         <span id="email-placeholder" class="text-text-secondary">El email aparecerá aquí...</span>
         <div id="email-loading" class="absolute inset-0 items-center justify-center hidden">
           <div class="flex gap-1">
@@ -74,7 +82,7 @@
       </div>
 
       <!-- Stats -->
-      <div id="email-stats" class="grid grid-cols-2 gap-2 hidden">
+      <div id="email-stats" class="grid-cols-2 gap-2 hidden">
         <div class="border-2 border-primary rounded-lg p-4 transition-all bg-primary-dark/30">
           <div id="email-tiempo" class="text-lg font-bold text-accent-mint">—</div>
           <div class="mono text-xs uppercase tracking-widest mt-2 text-text-secondary">segundos</div>
@@ -97,6 +105,7 @@
   const loading = document.getElementById('email-loading')!;
   const placeholder = document.getElementById('email-placeholder')!;
   const copiarBtn = document.getElementById('email-copiar')!;
+  const limpiarBtn = document.getElementById('email-limpiar')!;
   const stats = document.getElementById('email-stats')!;
   const statTiempo = document.getElementById('email-tiempo')!;
   const statPalabras = document.getElementById('email-palabras')!;
@@ -136,11 +145,13 @@
       loading.classList.add('hidden');
 
       output.innerHTML = '';
-      output.className = 'relative min-h-60 border-2 rounded-xl p-4 text-sm leading-relaxed transition-all bg-gradient-to-br from-primary/30 to-bg-dark/80 border-primary text-text-light whitespace-pre-wrap';
+      output.className = 'relative min-h-60 border-2 rounded-xl p-4 text-sm leading-relaxed transition-all bg-linear-to-br from-primary/30 to-bg-dark/80 border-primary text-text-light whitespace-pre-wrap';
       output.appendChild(document.createTextNode(resultadoTexto));
 
       copiarBtn.classList.remove('hidden');
+      copiarBtn.classList.add('inline-flex');
       stats.classList.remove('hidden');
+      stats.classList.add('grid');
       statTiempo.textContent = tiempo + 's';
       statPalabras.textContent = palabras.toString();
 
@@ -151,8 +162,33 @@
   });
 
   copiarBtn.addEventListener('click', () => {
+    if (!resultadoTexto.trim()) return;
     navigator.clipboard.writeText(resultadoTexto);
     copiarBtn.textContent = '✓ copiado';
-    setTimeout(() => copiarBtn.textContent = 'copiar →', 2000);
+    setTimeout(() => {
+      copiarBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 10h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+        copiar
+      `;
+    }, 2000);
+  });
+
+  limpiarBtn.addEventListener('click', () => {
+    asuntoInput.value = '';
+    tonoSelect.selectedIndex = 0;
+    input.value = '';
+    resultadoTexto = '';
+    output.innerHTML = '';
+    output.appendChild(placeholder);
+    output.appendChild(loading);
+    placeholder.classList.remove('hidden');
+    loading.classList.add('hidden');
+    copiarBtn.classList.add('hidden');
+    copiarBtn.classList.remove('inline-flex');
+    stats.classList.add('hidden');
+    stats.classList.remove('grid');
+    asuntoInput.focus();
   });
 </script>

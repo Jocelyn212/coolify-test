@@ -8,8 +8,7 @@
 
   <div class="border-2 border-primary rounded-xl p-4 md:p-6 bg-primary/20">
     <p class="mono text-xs md:text-sm text-text-secondary leading-relaxed mb-4">
-      Introduce la URL de tu pagina web y te dare un informe rapido de: velocidad de carga, como se ve en movil,
-      problemas basicos de SEO y una puntuacion general.
+      Introduce la URL de tu pagina web y te daremos un informe completo comparando rendimiento en Movil vs Desktop.
     </p>
 
     <div class="grid gap-3 md:grid-cols-[1fr_auto]">
@@ -35,23 +34,17 @@
       <span class="w-3 h-3 rounded-full animate-bounce bg-primary" style="animation-delay:0s;"></span>
       <span class="w-3 h-3 rounded-full animate-bounce bg-primary-light" style="animation-delay:0.15s;"></span>
       <span class="w-3 h-3 rounded-full animate-bounce bg-accent-mint" style="animation-delay:0.3s;"></span>
-      <span class="mono text-xs text-text-secondary ml-2">Analizando tu web...</span>
+      <span id="auditor-loading-message" class="mono text-xs text-text-secondary ml-2">Analizando tu web...</span>
     </div>
   </div>
 
   <div id="auditor-result" class="hidden flex-col gap-4">
-    <div class="border-2 border-primary rounded-xl p-4 md:p-6 bg-primary/20">
-      <div class="flex items-center justify-between gap-4 flex-wrap">
-        <p class="mono text-xs uppercase tracking-widest text-text-secondary">Puntuacion general</p>
-        <div id="auditor-score-pill" class="text-xl font-extrabold px-4 py-2 rounded-lg border-2 border-primary">--/100</div>
-      </div>
-    </div>
-
     <div class="border-2 border-accent-mint rounded-xl p-4 md:p-6 bg-accent-mint/10">
-      <h3 class="font-bold text-lg mb-3 text-accent-mint">Resumen rapido para tu negocio</h3>
-      <p class="mono text-xs text-text-secondary mb-3">Este resumen traduce el analisis tecnico a decisiones claras.</p>
+      <h3 class="font-bold text-lg mb-3 text-accent-mint">Comparativa: Cómo funciona tu web</h3>
+      <p class="mono text-xs text-text-secondary mb-3">Aquí ves el rendimiento lado a lado: en dispositivos móviles vs ordenadores.</p>
       <ul id="auditor-summary" class="list-disc list-inside text-text-light space-y-2"></ul>
       <a
+        id="auditor-cta-main"
         href="https://www.jctechstudio.es/tipos-de-web"
         class="inline-flex items-center gap-2 btn-cta rounded-xl px-5 py-3 mt-4"
       >
@@ -60,22 +53,68 @@
       </a>
     </div>
 
-    <div class="grid md:grid-cols-4 gap-3">
-      <div class="border-2 border-primary rounded-xl p-4 bg-primary/20">
-        <p class="mono text-xs uppercase tracking-widest text-text-secondary">Rendimiento</p>
-        <p id="auditor-performance" class="text-2xl font-bold mt-2">--</p>
+    <!-- Comparativa Móvil vs Desktop -->
+    <div class="grid md:grid-cols-2 gap-4">
+      <!-- COLUMNA MÓVIL -->
+      <div class="border-2 border-primary rounded-xl p-4 md:p-6 bg-primary/20">
+        <div class="flex items-center justify-between mb-4">
+          <p class="font-bold text-lg">📱 Análisis Móvil</p>
+          <p id="auditor-mobile-score-pill" class="text-lg font-extrabold px-3 py-1 rounded-lg border-2 border-primary text-emerald-300">--/100</p>
+        </div>
+        
+        <div class="space-y-3">
+          <div class="border border-primary/60 rounded-lg p-3">
+            <p class="mono text-xs uppercase tracking-widest text-text-secondary">Rendimiento</p>
+            <p id="auditor-mobile-performance" class="text-2xl font-bold mt-2">--</p>
+            <p id="auditor-mobile-performance-status" class="mono text-xs mt-1 text-text-secondary">—</p>
+          </div>
+          <div class="border border-primary/60 rounded-lg p-3">
+            <p class="mono text-xs uppercase tracking-widest text-text-secondary">Accesibilidad</p>
+            <p id="auditor-mobile-accessibility" class="text-2xl font-bold mt-2">--</p>
+            <p id="auditor-mobile-accessibility-status" class="mono text-xs mt-1 text-text-secondary">—</p>
+          </div>
+          <div class="border border-primary/60 rounded-lg p-3">
+            <p class="mono text-xs uppercase tracking-widest text-text-secondary">SEO</p>
+            <p id="auditor-mobile-seo" class="text-2xl font-bold mt-2">--</p>
+            <p id="auditor-mobile-seo-status" class="mono text-xs mt-1 text-text-secondary">—</p>
+          </div>
+          <div class="border border-primary/60 rounded-lg p-3">
+            <p class="mono text-xs uppercase tracking-widest text-text-secondary">Best Practices</p>
+            <p id="auditor-mobile-bestpractices" class="text-2xl font-bold mt-2">--</p>
+            <p id="auditor-mobile-bestpractices-status" class="mono text-xs mt-1 text-text-secondary">—</p>
+          </div>
+        </div>
       </div>
-      <div class="border-2 border-primary rounded-xl p-4 bg-primary/20">
-        <p class="mono text-xs uppercase tracking-widest text-text-secondary">Mobile Friendly</p>
-        <p id="auditor-mobile" class="text-2xl font-bold mt-2">--</p>
-      </div>
-      <div class="border-2 border-primary rounded-xl p-4 bg-primary/20">
-        <p class="mono text-xs uppercase tracking-widest text-text-secondary">SEO basico</p>
-        <p id="auditor-seo" class="text-2xl font-bold mt-2">--</p>
-      </div>
-      <div class="border-2 border-primary rounded-xl p-4 bg-primary/20">
-        <p class="mono text-xs uppercase tracking-widest text-text-secondary">Best Practices</p>
-        <p id="auditor-best-practices" class="text-2xl font-bold mt-2">--</p>
+
+      <!-- COLUMNA DESKTOP -->
+      <div class="border-2 border-primary rounded-xl p-4 md:p-6 bg-primary/20">
+        <div class="flex items-center justify-between mb-4">
+          <p class="font-bold text-lg">🖥️ Análisis Desktop</p>
+          <p id="auditor-desktop-score-pill" class="text-lg font-extrabold px-3 py-1 rounded-lg border-2 border-primary text-emerald-300">--/100</p>
+        </div>
+        
+        <div class="space-y-3">
+          <div class="border border-primary/60 rounded-lg p-3">
+            <p class="mono text-xs uppercase tracking-widest text-text-secondary">Rendimiento</p>
+            <p id="auditor-desktop-performance" class="text-2xl font-bold mt-2">--</p>
+            <p id="auditor-desktop-performance-status" class="mono text-xs mt-1 text-text-secondary">—</p>
+          </div>
+          <div class="border border-primary/60 rounded-lg p-3">
+            <p class="mono text-xs uppercase tracking-widest text-text-secondary">Accesibilidad</p>
+            <p id="auditor-desktop-accessibility" class="text-2xl font-bold mt-2">--</p>
+            <p id="auditor-desktop-accessibility-status" class="mono text-xs mt-1 text-text-secondary">—</p>
+          </div>
+          <div class="border border-primary/60 rounded-lg p-3">
+            <p class="mono text-xs uppercase tracking-widest text-text-secondary">SEO</p>
+            <p id="auditor-desktop-seo" class="text-2xl font-bold mt-2">--</p>
+            <p id="auditor-desktop-seo-status" class="mono text-xs mt-1 text-text-secondary">—</p>
+          </div>
+          <div class="border border-primary/60 rounded-lg p-3">
+            <p class="mono text-xs uppercase tracking-widest text-text-secondary">Best Practices</p>
+            <p id="auditor-desktop-bestpractices" class="text-2xl font-bold mt-2">--</p>
+            <p id="auditor-desktop-bestpractices-status" class="mono text-xs mt-1 text-text-secondary">—</p>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -157,13 +196,21 @@
   const submitBtn = document.getElementById('auditor-submit') as HTMLButtonElement;
   const errorEl = document.getElementById('auditor-error') as HTMLParagraphElement;
   const loadingEl = document.getElementById('auditor-loading') as HTMLDivElement;
+  const loadingMessageEl = document.getElementById('auditor-loading-message') as HTMLSpanElement;
   const resultEl = document.getElementById('auditor-result') as HTMLDivElement;
   const scorePillEl = document.getElementById('auditor-score-pill') as HTMLDivElement;
+  const analysisModeEl = document.getElementById('auditor-analysis-mode') as HTMLParagraphElement;
+  const modeBtns = document.querySelectorAll('.auditor-mode-btn') as NodeListOf<HTMLButtonElement>;
+  const ctaMainEl = document.getElementById('auditor-cta-main') as HTMLAnchorElement;
   const summaryEl = document.getElementById('auditor-summary') as HTMLUListElement;
   const performanceEl = document.getElementById('auditor-performance') as HTMLParagraphElement;
+  const performanceStatusEl = document.getElementById('auditor-performance-status') as HTMLParagraphElement;
   const mobileEl = document.getElementById('auditor-mobile') as HTMLParagraphElement;
+  const mobileStatusEl = document.getElementById('auditor-mobile-status') as HTMLParagraphElement;
   const seoEl = document.getElementById('auditor-seo') as HTMLParagraphElement;
+  const seoStatusEl = document.getElementById('auditor-seo-status') as HTMLParagraphElement;
   const bestPracticesEl = document.getElementById('auditor-best-practices') as HTMLParagraphElement;
+  const bestPracticesStatusEl = document.getElementById('auditor-best-practices-status') as HTMLParagraphElement;
   const fcpEl = document.getElementById('auditor-fcp') as HTMLParagraphElement;
   const lcpEl = document.getElementById('auditor-lcp') as HTMLParagraphElement;
   const tbtEl = document.getElementById('auditor-tbt') as HTMLParagraphElement;
@@ -182,9 +229,68 @@
   }
 
   function scoreText(score: number) {
-    if (score >= 80) return 'Muy bien';
-    if (score >= 60) return 'Mejorable';
+    if (score === 100) return 'Muy bien';
+    if (score >= 85) return 'Bien';
+    if (score >= 60) return 'Necesita mejorar';
     return 'Urgente';
+  }
+
+  function scoreStatus(score: number) {
+    if (score === 100) return 'Muy bien';
+    if (score >= 85) return 'Bien';
+    if (score >= 60) return 'Necesita mejorar';
+    return 'Urgente';
+  }
+
+  function scoreTextClass(score: number) {
+    if (score >= 85) return 'text-emerald-300';
+    if (score >= 60) return 'text-amber-300';
+    return 'text-red-300';
+  }
+
+  function applyScoreVisual(valueEl: HTMLElement, statusEl: HTMLElement, score: number) {
+    valueEl.classList.remove('text-emerald-300', 'text-amber-300', 'text-red-300');
+    statusEl.classList.remove('text-emerald-300', 'text-amber-300', 'text-red-300');
+    const cls = scoreTextClass(score);
+    valueEl.classList.add(cls);
+    statusEl.classList.add(cls);
+    statusEl.textContent = scoreStatus(score);
+  }
+
+  const loadingMessages = [
+    'Analizando tiempos de respuesta...',
+    'Revisando optimización de imágenes...',
+    'Comprobando visibilidad en Google...',
+    'Evaluando rendimiento en dispositivos móviles...',
+    'Validando estructura técnica...',
+    'Midiendo velocidad de carga...',
+  ];
+
+  let currentMessageIndex = 0;
+  let messageRotationInterval: number | null = null;
+
+  function startLoadingMessages() {
+    currentMessageIndex = 0;
+    loadingMessageEl.textContent = loadingMessages[0];
+    messageRotationInterval = setInterval(() => {
+      currentMessageIndex = (currentMessageIndex + 1) % loadingMessages.length;
+      loadingMessageEl.textContent = loadingMessages[currentMessageIndex];
+    }, 2000);
+  }
+
+  function stopLoadingMessages() {
+    if (messageRotationInterval) {
+      clearInterval(messageRotationInterval);
+      messageRotationInterval = null;
+    }
+  }
+
+
+  function parseSeconds(metric: string) {
+    const match = metric.match(/([\d.,]+)\s*s/i);
+    if (!match) return null;
+    const num = Number.parseFloat(match[1].replace(',', '.'));
+    return Number.isFinite(num) ? num : null;
   }
 
   function setList(target: HTMLUListElement, items: string[]) {
@@ -195,6 +301,33 @@
       target.appendChild(li);
     });
   }
+
+  let selectedStrategy: 'mobile' | 'desktop' = (localStorage.getItem('auditor_strategy') === 'desktop' ? 'desktop' : 'mobile');
+
+  function renderStrategyButtons() {
+    modeBtns.forEach((btn) => {
+      const strategy = btn.dataset.strategy as 'mobile' | 'desktop';
+      const active = strategy === selectedStrategy;
+      btn.classList.remove('text-text-secondary', 'bg-transparent', 'text-accent-mint', 'bg-accent-mint/15');
+      if (active) {
+        btn.classList.add('text-accent-mint', 'bg-accent-mint/15');
+      } else {
+        btn.classList.add('text-text-secondary', 'bg-transparent');
+      }
+    });
+  }
+
+  modeBtns.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const strategy = btn.dataset.strategy;
+      if (strategy !== 'mobile' && strategy !== 'desktop') return;
+      selectedStrategy = strategy;
+      localStorage.setItem('auditor_strategy', selectedStrategy);
+      renderStrategyButtons();
+    });
+  });
+
+  renderStrategyButtons();
 
   submitBtn.addEventListener('click', async () => {
     const websiteUrl = urlInput.value.trim();
@@ -209,12 +342,13 @@
 
     loadingEl.classList.remove('hidden');
     submitBtn.disabled = true;
+    startLoadingMessages();
 
     try {
       const response = await fetch('/api/auditor', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: websiteUrl }),
+        body: JSON.stringify({ url: websiteUrl, strategy: selectedStrategy }),
       });
 
       const data = await response.json();
@@ -229,9 +363,12 @@
       const seo = data?.scores?.seo ?? 0;
       const bestPractices = data?.scores?.bestPractices ?? 0;
       const issues = data.issues || ['No se detectaron problemas graves.'];
+      const lcpMetric = data?.metrics?.lcp || 'N/D';
+      const loadSeconds = parseSeconds(lcpMetric);
 
       scorePillEl.textContent = `${total}/100 · ${scoreText(total)}`;
       scorePillEl.className = `text-xl font-extrabold px-4 py-2 rounded-lg border-2 ${scoreClass(total)}`;
+      analysisModeEl.textContent = `Analizado en: ${data?.analysisMode === 'desktop' ? 'Desktop' : 'Movil'}`;
 
       const summary: string[] = [];
       const areaScores = [
@@ -282,10 +419,21 @@
         ? 'Accion recomendada: mantenimiento mensual y optimizacion ligera para seguir creciendo.'
         : 'Accion recomendada: ejecutar mejoras en el area prioritaria y volver a medir en 7 dias.';
 
+      let impactTextFinal = impactText;
+      let actionTextFinal = actionText;
+
+      if (typeof loadSeconds === 'number' && loadSeconds > 3) {
+        impactTextFinal = 'La velocidad de carga actual puede estar reduciendo el tiempo que los usuarios permanecen en tu web y afectando la captacion de contactos.';
+        actionTextFinal = 'Accion recomendada: priorizar velocidad de carga de inmediato para recuperar visitas y conversion.';
+        ctaMainEl.innerHTML = 'Quiero mejorar los tiempos de carga de mi web <span>→</span>';
+      } else {
+        ctaMainEl.innerHTML = 'Quiero mejorar mi web <span>→</span>';
+      }
+
       summary.push(statusText);
       summary.push(`Prioridad 1: ${priorityText}`);
-      summary.push(impactText);
-      summary.push(actionText);
+      summary.push(impactTextFinal);
+      summary.push(actionTextFinal);
 
       setList(summaryEl, summary);
 
@@ -293,6 +441,10 @@
       mobileEl.textContent = `${mobile}/100`;
       seoEl.textContent = `${seo}/100`;
       bestPracticesEl.textContent = `${bestPractices}/100`;
+      applyScoreVisual(performanceEl, performanceStatusEl, performance);
+      applyScoreVisual(mobileEl, mobileStatusEl, mobile);
+      applyScoreVisual(seoEl, seoStatusEl, seo);
+      applyScoreVisual(bestPracticesEl, bestPracticesStatusEl, bestPractices);
 
       fcpEl.textContent = data?.metrics?.fcp || 'N/D';
       lcpEl.textContent = data?.metrics?.lcp || 'N/D';
@@ -301,6 +453,18 @@
       siEl.textContent = data?.metrics?.si || 'N/D';
       inpEl.textContent = data?.metrics?.inp || 'N/D';
       ttfbEl.textContent = data?.metrics?.ttfb || 'N/D';
+
+      const lcpSeconds = parseSeconds(lcpEl.textContent || '');
+      lcpEl.classList.remove('text-emerald-300', 'text-amber-300', 'text-red-300', 'text-red-400');
+      if (typeof lcpSeconds === 'number') {
+        if (lcpSeconds <= 2.5) {
+          lcpEl.classList.add('text-emerald-300');
+        } else if (lcpSeconds <= 4) {
+          lcpEl.classList.add('text-amber-300');
+        } else {
+          lcpEl.classList.add('text-red-400');
+        }
+      }
 
       const opportunities = Array.isArray(data.opportunities) ? data.opportunities : [];
       setList(opportunitiesEl, opportunities.length > 0 ? opportunities : ['No hay oportunidades destacadas en esta medicion.']);
@@ -315,6 +479,7 @@
       errorEl.textContent = message;
       errorEl.classList.remove('hidden');
     } finally {
+      stopLoadingMessages();
       loadingEl.classList.add('hidden');
       submitBtn.disabled = false;
     }

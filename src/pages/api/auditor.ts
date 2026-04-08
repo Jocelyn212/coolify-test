@@ -1,10 +1,11 @@
 export const prerender = false;
 
 type AuditResult = {
+  analysisMode: 'mobile' | 'desktop';
   scores: {
     total: number;
     performance: number;
-    mobile: number;
+    accessibility: number;
     seo: number;
     bestPractices: number;
   };
@@ -86,7 +87,7 @@ function pushAuditFinding(
   recommendations.push(recommendation);
 }
 
-function parseLighthouseResult(lighthouse: LighthouseResult, finalUrl: string): AuditResult {
+function parseLighthouseResult(lighthouse: LighthouseResult, finalUrl: string, analysisMode: 'mobile' | 'desktop'): AuditResult {
   const issues: string[] = [];
   const recommendations: string[] = [];
 
@@ -187,7 +188,7 @@ function parseLighthouseResult(lighthouse: LighthouseResult, finalUrl: string): 
     pushUnique(opportunities, `Reducir tiempo de respuesta del servidor (${metrics.ttfb})`);
   }
 
-  const total = clamp(Math.round((performance + mobile + seo) / 3), 0, 100);
+  const total = clamp(Math.round((performance + accessibility + seo) / 3), 0, 100);
 
   if (issues.length === 0) {
     issues.push('No se detectaron problemas destacados en Lighthouse para esta URL.');
@@ -195,10 +196,11 @@ function parseLighthouseResult(lighthouse: LighthouseResult, finalUrl: string): 
   }
 
   return {
+    analysisMode,
     scores: {
       total,
       performance,
-      mobile,
+      accessibility,
       seo,
       bestPractices,
     },
@@ -213,6 +215,7 @@ export async function POST({ request }: { request: Request }) {
   try {
     const requestBody = await request.json();
     const rawUrl = String(requestBody?.url || '');
+    const requestedMode = requestBody?.strategy === 'desktop' ? 'desktop' : 'mobile';
 
     if (!rawUrl.trim()) {
       return new Response(JSON.stringify({ error: 'Debes introducir una URL.' }), {
@@ -225,7 +228,7 @@ export async function POST({ request }: { request: Request }) {
 
     const apiUrl = new URL('https://www.googleapis.com/pagespeedonline/v5/runPagespeed');
     apiUrl.searchParams.set('url', targetUrl);
-    apiUrl.searchParams.set('strategy', 'mobile');
+    apiUrl.searchParams.set('strategy', requestedMode);
     apiUrl.searchParams.append('category', 'performance');
     apiUrl.searchParams.append('category', 'accessibility');
     apiUrl.searchParams.append('category', 'seo');
@@ -283,7 +286,7 @@ export async function POST({ request }: { request: Request }) {
       });
     }
 
-    const result = parseLighthouseResult(lighthouse, pageSpeedData?.id || targetUrl);
+    const result = parseLighthouseResult(lighthouse, pageSpeedData?.id || targetUrl, requestedMode);
 
     return new Response(JSON.stringify(result), {
       status: 200,

@@ -9,21 +9,32 @@
   </div>
 
   <!-- Chat container -->
-  <div class="flex flex-col gap-6 bg-primary/20 border-2 border-primary rounded-xl p-6 min-h-[350px]">
+  <div class="flex flex-col gap-6 bg-primary/20 border-2 border-primary rounded-xl p-6 min-h-87.5">
     
     <!-- Header con botón limpiar -->
     <div class="flex justify-between items-center">
       <span class="mono text-xs uppercase tracking-widest font-semibold text-accent-mint">Conversación</span>
-      <button
-        id="chat-clear"
-        class="mono text-xs px-3 py-1 rounded transition-all font-medium text-accent-mint border border-accent-mint hover:bg-accent-mint/10 hover:opacity-90"
-      >
-        limpiar
-      </button>
+      <div class="flex items-center gap-2">
+        <button
+          id="chat-copy"
+          class="mono text-xs px-3 py-1 rounded transition-all font-medium text-text-light bg-accent-mint/15 hover:bg-accent-mint/25 hover:text-accent-mint inline-flex items-center gap-1"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 10h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+          </svg>
+          copiar resultado
+        </button>
+        <button
+          id="chat-clear"
+          class="mono text-xs px-3 py-1 rounded transition-all font-medium text-accent-mint border border-accent-mint hover:bg-accent-mint/10 hover:opacity-90"
+        >
+          limpiar
+        </button>
+      </div>
     </div>
     
     <!-- Messages -->
-    <div id="chat-messages" class="flex-1 overflow-y-auto space-y-3 min-h-[250px] p-4 bg-primary/10 rounded-lg border border-primary/30">
+    <div id="chat-messages" class="flex-1 overflow-y-auto space-y-3 min-h-62.5 p-4 bg-primary/10 rounded-lg border border-primary/30">
       <div class="flex justify-start">
         <div class="rounded-lg rounded-tl-none px-4 py-2 max-w-[80%] bg-primary">
           <p class="text-sm text-text-light">¡Hola! Soy tu asistente IA. ¿Cómo puedo ayudarte?</p>
@@ -42,7 +53,7 @@
       />
       <button
         type="submit"
-        class="font-bold px-6 py-3 rounded-lg transition-all hover:opacity-80 mono text-sm text-bg-dark flex-shrink-0 bg-accent-mint border-2 border-accent-mint"
+        class="font-bold px-6 py-3 rounded-lg transition-all hover:opacity-80 mono text-sm text-bg-dark shrink-0 bg-accent-mint border-2 border-accent-mint"
       >
         enviar →
       </button>
@@ -54,6 +65,8 @@
   const messagesContainer = document.getElementById('chat-messages')!;
   const form = document.getElementById('chat-form')!;
   const chatInput = document.getElementById('chat-input') as HTMLInputElement;
+  const copyBtn = document.getElementById('chat-copy') as HTMLButtonElement;
+  let lastAssistantMessage = '¡Hola! Soy tu asistente IA. ¿Cómo puedo ayudarte?';
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -75,6 +88,9 @@
 
     wrapper.appendChild(bubble);
     messagesContainer.appendChild(wrapper);
+    if (!esUsuario) {
+      lastAssistantMessage = texto;
+    }
     scrollToBottom();
     return wrapper;
   };
@@ -129,6 +145,20 @@
     messagesContainer.innerHTML = '';
     addMessage('¡Hola! Soy tu asistente IA. ¿Cómo puedo ayudarte?', false);
     chatInput.focus();
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    if (!lastAssistantMessage.trim()) return;
+    await navigator.clipboard.writeText(lastAssistantMessage);
+    copyBtn.textContent = '✓ copiado';
+    setTimeout(() => {
+      copyBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 10h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+        copiar resultado
+      `;
+    }, 2000);
   });
 </script>
 

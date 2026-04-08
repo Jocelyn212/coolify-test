@@ -41,9 +41,17 @@
     <div class="flex flex-col gap-4">
       <div class="flex justify-between items-center">
         <label class="mono text-xs tracking-widest uppercase font-semibold text-accent-mint">Resultado</label>
-        <button id="asistente-copiar" class="mono text-sm transition-all font-medium hidden px-3 py-1 rounded text-text-light bg-accent-mint/15 hover:bg-accent-mint/25 hover:text-accent-mint">
-          copiar →
-        </button>
+        <div class="flex items-center gap-2">
+          <button id="asistente-copiar" class="mono text-sm transition-all font-medium hidden px-3 py-1 rounded text-text-light bg-accent-mint/15 hover:bg-accent-mint/25 hover:text-accent-mint items-center gap-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 10h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+            </svg>
+            copiar
+          </button>
+          <button id="asistente-limpiar" class="mono text-sm transition-all font-medium px-3 py-1 rounded text-text-light bg-primary/40 hover:bg-primary/60">
+            limpiar
+          </button>
+        </div>
       </div>
 
       <div id="asistente-output" class="relative min-h-60 border-2 border-primary rounded-xl p-4 text-base leading-relaxed transition-all bg-primary/30 text-text-light">
@@ -58,7 +66,7 @@
       </div>
 
       <!-- Stats -->
-      <div id="asistente-stats" class="hidden grid grid-cols-2 gap-2">
+      <div id="asistente-stats" class="hidden grid-cols-2 gap-2">
         <div class="border-2 border-primary rounded-lg p-4 bg-primary-dark/30">
           <div id="asistente-tiempo" class="text-lg font-bold text-accent-mint">—</div>
           <div class="mono text-xs uppercase tracking-widest mt-2 text-text-secondary">segundos</div>
@@ -79,6 +87,7 @@
   const loading = document.getElementById('asistente-loading')!;
   const placeholder = document.getElementById('asistente-placeholder')!;
   const copiarBtn = document.getElementById('asistente-copiar')!;
+  const limpiarBtn = document.getElementById('asistente-limpiar')!;
   const stats = document.getElementById('asistente-stats')!;
   const statTiempo = document.getElementById('asistente-tiempo')!;
   const statPalabras = document.getElementById('asistente-palabras')!;
@@ -121,7 +130,9 @@
         output.appendChild(loading);
 
         copiarBtn.classList.remove('hidden');
+        copiarBtn.classList.add('inline-flex');
         stats.classList.remove('hidden');
+        stats.classList.add('grid');
         statTiempo.textContent = tiempo + 's';
         statPalabras.textContent = palabras.toString();
 
@@ -134,8 +145,32 @@
   });
 
   copiarBtn.addEventListener('click', () => {
+    if (!resultadoTexto.trim()) return;
     navigator.clipboard.writeText(resultadoTexto);
     copiarBtn.textContent = '✓ copiado';
-    setTimeout(() => copiarBtn.textContent = 'copiar →', 2000);
+    setTimeout(() => {
+      copiarBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 10h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+        copiar
+      `;
+    }, 2000);
+  });
+
+  limpiarBtn.addEventListener('click', () => {
+    input.value = '';
+    resultadoTexto = '';
+    output.innerHTML = '';
+    output.appendChild(placeholder);
+    output.appendChild(loading);
+    placeholder.classList.remove('hidden');
+    loading.classList.add('hidden');
+    loading.classList.remove('flex');
+    copiarBtn.classList.add('hidden');
+    copiarBtn.classList.remove('inline-flex');
+    stats.classList.add('hidden');
+    stats.classList.remove('grid');
+    input.focus();
   });
 </script>
